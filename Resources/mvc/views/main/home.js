@@ -41,17 +41,14 @@ var Home = function(app,controller,data){
 	 * add content to view for use by layout
 	 */
 	this.addContent = function(){
-		self.rootView = Titanium.UI.createTableView({
-			data:self.data.list
+		self.rootView = Titanium.UI.createView({
+			backgroundColor: 'pink'
 		});
-		self.rootView.addEventListener('click',function(e){
-			if(e.rowData.newWindow){
-				self.App.loadRoute(e.rowData.title,e.rowData.route,e.rowData.request);
-			}else{
-				self.App.setWindowRoute(e.rowData.route,e.rowData.request);
-				self.App.routeWindow();
-			}
+		var lblHello = Titanium.UI.createLabel({
+			color: 'white',
+			text: 'Hello world!'
 		});
+		self.rootView.add(lblHello);
 	}
 	
 	/**
