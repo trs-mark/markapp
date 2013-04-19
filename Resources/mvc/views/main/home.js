@@ -41,17 +41,33 @@ var Home = function(app,controller,data){
 	 * add content to view for use by layout
 	 */
 	this.addContent = function(){
-		self.rootView = Titanium.UI.createTableView({
-			data:self.data.list
-		});
-		self.rootView.addEventListener('click',function(e){
-			if(e.rowData.newWindow){
-				self.App.loadRoute(e.rowData.title,e.rowData.route,e.rowData.request);
-			}else{
-				self.App.setWindowRoute(e.rowData.route,e.rowData.request);
-				self.App.routeWindow();
+		self.rootView = Titanium.UI.createView({
+			backgroundGradient: {
+				type: 'radial',
+				startPoint: { x: 250, y: 250 },
+				endPoint: { x: 250, y: 250 },
+				colors: [ 'blue', 'white'],
+				startRadius: '90%',
+				endRadius: 0,
+				backfillStart: true
 			}
 		});
+		var btnStart = Titanium.UI.createButton({
+			title: 'START',
+			height: self.App.util.dP(50),
+			width: self.App.util.dP(200),
+			color: '#3333FF',
+			backgroundGradient: {
+				type: 'linear',
+				startPoint: { x: '0%', y: '50%' },
+				endPoint: { x: '100%', y: '50%' },
+				colors: [ { color: 'red', offset: 0.0}, { color: 'blue', offset: 0.25 }, { color: 'red', offset: 1.0 } ],
+			}
+		});
+		btnStart.addEventListener('click',function(e){
+			self.App.loadRoute("Multi-Dashboard Example","example/multidashboard",{});
+		});
+		self.rootView.add(btnStart);
 	}
 	
 	/**
