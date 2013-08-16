@@ -37,7 +37,7 @@ function QuizListWindow(iphoneNav) {
 		}));
 		row.addEventListener('click', function(e){
 			var QuizWindow = require('ui/QuizWindow');
-			var quizWindow = new QuizWindow(e.source.children[0].text,e.source.customRange.start,e.source.customRange.end);
+			var quizWindow = new QuizWindow(iphoneNav,e.source.children[0].text,e.source.customRange.start,e.source.customRange.end);
 			iphoneNav.open(quizWindow,{animated:true});
 		});
 		

@@ -21,6 +21,40 @@ var BG_PATH = 'iphone_images/bg.png';
 var IMG_PATH = 'iphone_images/';
 var DEVICE_HEIGHT = Ti.Platform.displayCaps.platformHeight;
 var DEVICE_WIDTH = Ti.Platform.displayCaps.platformWidth;
+/*
+ * global helper function
+ */
+var convert = function(quest){
+	var q = quest; 
+	var conq;
+	/*var dataUniSup = ['\u00B9','\u00B2','\u00B3','\u2074','\u2076','\u207A','\u207B'];
+	var dataUniSub = ['\u2081','\u2082','\u2083','\u2084','\u2086','\u208A','\u208B'];10fc = 6 1D9D  04A9 U+03ED 0328*/
+	
+	if(IS_ANDROID){
+		var dataUniSup = ['\u00B9','\u00B2','\u00B3','\u2074','\u2076',' \u0E4B','\u02C9'];
+		var dataUniSub = ['\u2081','\u2082','\u2083','\u2084','<sub>6</sub>',' \u031F ','\u02CD'];
+	}else{
+		var dataUniSup = ['\u00B9','\u00B2','\u00B3','\u2074','\u2076','\u207A','\u207B'];
+		var dataUniSub = ['\u2081','\u2082','\u2083','\u2084','\u2086',' \u031F ','\u02CD'];
+	}
+	var dataSup = [/<sup>1/g,/<sup>2/g,/<sup>3/g,/<sup>4/g,/<sup>6/g,/<sup>plus/g,/<sup>minus/g];
+	var dataSub = [/<sub>1/g,/<sub>2/g,/<sub>3/g,/<sub>4/g,/<sub>6/g,/<sub>plus/g,/<sub>minus/g];
+	var qIndexsuP = q.indexOf("<sup>");
+	var qIndexsuB = q.indexOf("<sub>");
+	
+	if(qIndexsuP!=-1){
+		for(var i=0;i<dataUniSup.length;i++){
+			q = q.replace(dataSup[i],dataUniSup[i]);
+		}
+	}
+	
+	if(qIndexsuB!=-1){
+		for(var i=0;i<dataUniSub.length;i++){
+			q = q.replace(dataSub[i],dataUniSub[i]);
+		}
+	}
+	return q;
+}
 
 try{
 var db = Ti.Database.install('eiyoushi.sqlite', DB_NAME);

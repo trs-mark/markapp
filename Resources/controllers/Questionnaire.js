@@ -9,13 +9,14 @@ function Questionnaire() {
 	Questionnaire.prototype.quizTracker = 0;
 	Questionnaire.prototype.quizBreadCrumps = 0;
 	Questionnaire.prototype.correctCount = 0;
+	Questionnaire.prototype.userAnswers = [];
 }
 
 /*
  * returns the contents of the questionnaire
  * @return {Ti.UI.ScrollView} quizView the questionnaire
  */
-Questionnaire.prototype.getQuizView = function(self,questionnaireObj){
+Questionnaire.prototype.getQuizView = function(iphoneNav,chapterTitle,start,end,quizWindow,questionnaireObj){
 	Ti.API.info(JSON.stringify(questionnaireObj));
 	Questionnaire.prototype.quizView = Ti.UI.createScrollView({
 		top: '12dp',
@@ -30,7 +31,9 @@ Questionnaire.prototype.getQuizView = function(self,questionnaireObj){
 		//alert('you swung ' + direction);
 		if (direction == 'left'){
 			if(Questionnaire.prototype.quizTracker >= Questionnaire.prototype.questionnaireObj.length){
-				alert(Questionnaire.prototype.correctCount);
+				var ResultWindow = require('ui/ResultWindow');
+				var resultWindow = new ResultWindow(iphoneNav,quizWindow,chapterTitle,Questionnaire.prototype.userAnswers,Questionnaire.prototype.correctCount,start,end,Questionnaire.prototype.questionnaireObj);
+				iphoneNav.open(resultWindow,{animated:'true'});
 			}else{
 				if (Questionnaire.prototype.quizBreadCrumps == Questionnaire.prototype.quizTracker){
 					Questionnaire.prototype.nextQuestionnaireItem();
@@ -62,6 +65,7 @@ Questionnaire.prototype.evaluateAnswer = function(choice){
 		var text = selectedChoice.text;
 		var stateInt = selectedChoice.stateInt;
 		
+		Questionnaire.prototype.userAnswers.push(choice);
 		if (stateStr === 'CORRECT'){
 			Questionnaire.prototype.correctCount++;
 		}
@@ -104,7 +108,7 @@ Questionnaire.prototype.setQuestionnaire = function(){
 		font: {fontSize:'20dp'},
 		left: '3dp',
 		color:'black'
-	})
+	});
 	
 	Questionnaire.prototype.theQuestionNumber = lblNumber;
 	Questionnaire.prototype.theQuestion = lblText;
@@ -129,7 +133,7 @@ Questionnaire.prototype.setQuestionnaire = function(){
 			color:'black'
 		});
 		var lblText = Ti.UI.createLabel({
-			text: Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[a].text,
+			text: convert(Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[a].text),
 			font: {fontSize:'15dp'},
 			left:'5dp',
 			right:'5dp',

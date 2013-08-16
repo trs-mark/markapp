@@ -1,7 +1,7 @@
 /**
  * QuizWindow for iPhone
  */
-function QuizWindow(windowTitle,start,end) {
+function QuizWindow(iphoneNav,windowTitle,start,end) {
 	var self = Ti.UI.createWindow({
 		title:windowTitle,
 		backgroundImage:(DEVICE_HEIGHT>=568)?IMG_PATH + 'chapter_quiz_bg_2_i5.png':IMG_PATH + 'chapter_quiz_bg_2.png'
@@ -27,7 +27,8 @@ function QuizWindow(windowTitle,start,end) {
 	*/
 	var QuestionSet = require('models/QuestionSet');
 	var questionnaireObjArr = new QuestionSet(start,end);
-	var quizView = questionnaire.getQuizView(self,questionnaireObjArr);
+	
+	var quizView = questionnaire.getQuizView(iphoneNav,windowTitle,start,end,self,questionnaireObjArr);
 	
 	//add buttons
 	var btnLefts = [0,'20%','40%','60%','80%']
@@ -42,7 +43,7 @@ function QuizWindow(windowTitle,start,end) {
 			backgroundImage:IMG_PATH + (i+1) + '_b.png'
 		});
 		btnChoice.addEventListener('click',function(e){
-			alert(questionnaire.evaluateAnswer(e.source.customButtonId));
+			Ti.API.info(questionnaire.evaluateAnswer(e.source.customButtonId));
 		});
 		self.add(btnChoice);
 	}
