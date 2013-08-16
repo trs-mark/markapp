@@ -33,13 +33,16 @@ function QuizWindow(windowTitle,start,end) {
 	var btnLefts = [0,'20%','40%','60%','80%']
 	for (var i=0; i<btnLefts.length; i++){
 		var btnChoice = Titanium.UI.createButton({
-			buttonId: i + 1,
+			customButtonId: i,
 			//id: QuizObj.questions[0].id,
 			left: btnLefts[i],
 			height:'60dp',
 			width:'20%',
 			bottom:(IS_ANDROID)?'2dp':'5dp',
 			backgroundImage:IMG_PATH + (i+1) + '_b.png'
+		});
+		btnChoice.addEventListener('click',function(e){
+			alert(questionnaire.evaluateAnswer(e.source.customButtonId));
 		});
 		self.add(btnChoice);
 	}

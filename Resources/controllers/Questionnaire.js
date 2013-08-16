@@ -6,6 +6,9 @@ function Questionnaire() {
 	Questionnaire.prototype.theQuestionNumber = null;
 	Questionnaire.prototype.theQuestion = null;
 	Questionnaire.prototype.theChoices = [];
+	Questionnaire.prototype.quizTracker = 0;
+	Questionnaire.prototype.quizBreadCrumps = 0;
+	Questionnaire.prototype.correctCount = 0;
 }
 
 /*
@@ -27,18 +30,53 @@ Questionnaire.prototype.getQuizView = function(self,questionnaireObj){
 		//alert('you swung ' + direction);
 		if (direction == 'left'){
 			if(Questionnaire.prototype.quizTracker >= Questionnaire.prototype.questionnaireObj.length){
-				alert('nothing');
+				alert(Questionnaire.prototype.correctCount);
 			}else{
-				Questionnaire.prototype.nextQuestionnaireItem();
+				if (Questionnaire.prototype.quizBreadCrumps == Questionnaire.prototype.quizTracker){
+					Questionnaire.prototype.nextQuestionnaireItem();
+				}else{
+					alert('not yet');
+				}
 			}
 		}
 	});
 	
-	Questionnaire.prototype.quizTracker = 0;
 	Questionnaire.prototype.questionnaireObj = questionnaireObj;
 	Questionnaire.prototype.setQuestionnaire();
 	
 	return Questionnaire.prototype.quizView;
+}
+
+/*
+ * evaluates the answer if it is correct or wrong
+ * @param {int} choice the choice button clicked by the user
+ * @return {boolean} result whether answer is correct or wrong
+ */
+Questionnaire.prototype.evaluateAnswer = function(choice){
+	var result = '';
+	if (Questionnaire.prototype.quizBreadCrumps < Questionnaire.prototype.quizTracker){
+		var selectedChoice = Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker-1].choices[choice];
+		var stateStr = selectedChoice.stateStr;
+		var id = selectedChoice.id;
+		var parentId = selectedChoice.parentId;
+		var text = selectedChoice.text;
+		var stateInt = selectedChoice.stateInt;
+		
+		if (stateStr === 'CORRECT'){
+			Questionnaire.prototype.correctCount++;
+		}
+		result = 'you selected ' + choice +
+				'\nid:' + id +
+				'\ntext:' + text +
+				'\nstateInt:' + stateInt +
+				'\nstateStr:' + stateStr +
+				'\nparentID:' + parentId;
+		
+		Questionnaire.prototype.quizBreadCrumps++;
+	}else{
+		result = 'no more';
+	}
+	return result;
 }
 
 /*
@@ -94,7 +132,8 @@ Questionnaire.prototype.setQuestionnaire = function(){
 			text: Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[a].text,
 			font: {fontSize:'15dp'},
 			left:'5dp',
-			color:'black'
+			right:'5dp',
+			color:(Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[a].stateStr==='CORRECT')?'pink':'black'
 		});
 		
 		Questionnaire.prototype.theChoices.push(lblText);
@@ -112,6 +151,7 @@ Questionnaire.prototype.nextQuestionnaireItem = function(){
 	Questionnaire.prototype.theQuestion.text = Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].question.text;
 	for (var x = 0; x<Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices.length; x++){
 		Questionnaire.prototype.theChoices[x].text = Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[x].text;
+		Questionnaire.prototype.theChoices[x].color = (Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[x].stateStr==='CORRECT')?'pink':'black';
 	}
 	Questionnaire.prototype.quizTracker++;
 }
