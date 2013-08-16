@@ -1,7 +1,7 @@
 /**
  * common HistoryViewerWindow single quiz viewer
  */
-function HistoryViewerWindow(chapterTitle,dataObj) {
+function HistoryViewerWindow(chapterTitle,dataObj,loading) {
 	var self = Ti.UI.createWindow({
 		title:chapterTitle,
 		backgroundImage:IMG_PATH + 'quiz_history_detail_bg.png'
@@ -40,6 +40,7 @@ function HistoryViewerWindow(chapterTitle,dataObj) {
 	
 	self.add(historyView);
 	
+	loading.hideLoading();
 	return self;
 }
 module.exports = HistoryViewerWindow;

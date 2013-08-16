@@ -64,6 +64,9 @@ function MainWindow() {
 		zIndex:1
 	});
 	
+	var ActivityIndicator = require('controllers/ActivityIndicator');
+	var loading = new ActivityIndicator();
+	
 	// create quiz button - ボタンをクイズ作成
 	var btnQuiz = Titanium.UI.createButton({
 		backgroundImage: IMG_PATH + 'top_btn_quiz_long.png',
@@ -72,8 +75,9 @@ function MainWindow() {
 		height:'79dp'
 	});
 	btnQuiz.addEventListener('click',function(e){
+		loading.showLoading(containerWindow,'Loading...',0.5);
 		var QuizListWindow = require('ui/QuizListWindow');
-		var quizListWindow = new QuizListWindow(iphoneNav);
+		var quizListWindow = new QuizListWindow(iphoneNav,loading);
 		iphoneNav.open(quizListWindow,{animated:true});
 	});
 	
@@ -85,8 +89,9 @@ function MainWindow() {
 		height:'79dp'
 	});
 	btnHistory.addEventListener('click',function(e){
+		loading.showLoading(containerWindow,'Loading...',0.5);
 		var HistoryWindow = require('ui/HistoryWindow');
-		var historyWindow = new HistoryWindow(iphoneNav);
+		var historyWindow = new HistoryWindow(iphoneNav,loading);
 		iphoneNav.open(historyWindow,{animated:true});
 	});
 	

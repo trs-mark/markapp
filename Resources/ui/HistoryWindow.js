@@ -1,7 +1,7 @@
 /**
  * HistoryWindow for iPhone
  */
-function HistoryWindow(iphoneNav) {
+function HistoryWindow(iphoneNav,loading) {
 	var self = Ti.UI.createWindow({
 		backgroundImage:BG_PATH,
 		title:'履歴一覧'
@@ -38,10 +38,11 @@ function HistoryWindow(iphoneNav) {
 			touchEnabled: false
 		}));
 		row.addEventListener('click', function(e){
+			loading.showLoading(self,'Loading...',1.0);
 			var x = e.source.customId;
 			var HistoryViewerWindow = require('ui/HistoryViewerWindow');
 			Ti.API.info(JSON.stringify(history[x].dataObj));
-			var historyViewerWindow = new HistoryViewerWindow(history[x].chapterTitle,history[x].dataObj);
+			var historyViewerWindow = new HistoryViewerWindow(history[x].chapterTitle,history[x].dataObj,loading);
 			iphoneNav.open(historyViewerWindow,{animated:true});
 		});
 		
@@ -57,6 +58,7 @@ function HistoryWindow(iphoneNav) {
 	
 	self.add(tableView);
 	
+	loading.hideLoading();
 	return self;
 }
 module.exports = HistoryWindow;

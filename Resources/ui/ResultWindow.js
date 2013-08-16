@@ -1,7 +1,7 @@
 /**
  * ResultWindow for iPhone
  */
-function ResultWindow(iphoneNav,quizWindow,chapterTitle,userAnswers,correctCount,start,end,questionnaireObj) {
+function ResultWindow(iphoneNav,quizWindow,chapterTitle,userAnswers,correctCount,start,end,questionnaireObj,loading) {
 	var btnBack = Ti.UI.createButton({
 		title:'戻る'
 	});
@@ -14,6 +14,9 @@ function ResultWindow(iphoneNav,quizWindow,chapterTitle,userAnswers,correctCount
 		title:'結果表示',
 		backgroundImage:IMG_PATH + 'bg.png',
 		leftNavButton: btnBack
+	});
+	self.addEventListener('open',function(e){
+		loading.hideLoading();
 	});
 	
 	var resultScrollView = Titanium.UI.createScrollView({

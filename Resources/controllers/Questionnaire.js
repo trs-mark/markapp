@@ -16,7 +16,7 @@ function Questionnaire() {
  * returns the contents of the questionnaire
  * @return {Ti.UI.ScrollView} quizView the questionnaire
  */
-Questionnaire.prototype.getQuizView = function(iphoneNav,chapterTitle,start,end,quizWindow,questionnaireObj){
+Questionnaire.prototype.getQuizView = function(iphoneNav,chapterTitle,start,end,quizWindow,questionnaireObj,loading){
 	Ti.API.info(JSON.stringify(questionnaireObj));
 	Questionnaire.prototype.quizView = Ti.UI.createScrollView({
 		top: '12dp',
@@ -31,14 +31,19 @@ Questionnaire.prototype.getQuizView = function(iphoneNav,chapterTitle,start,end,
 		//alert('you swung ' + direction);
 		if (direction == 'left'){
 			if(Questionnaire.prototype.quizTracker >= Questionnaire.prototype.questionnaireObj.length){
+				//go to result
+				loading.showLoading(quizWindow,'Loading...',1.0);
 				var ResultWindow = require('ui/ResultWindow');
-				var resultWindow = new ResultWindow(iphoneNav,quizWindow,chapterTitle,Questionnaire.prototype.userAnswers,Questionnaire.prototype.correctCount,start,end,Questionnaire.prototype.questionnaireObj);
+				var resultWindow = new ResultWindow(iphoneNav,quizWindow,chapterTitle,Questionnaire.prototype.userAnswers,Questionnaire.prototype.correctCount,start,end,Questionnaire.prototype.questionnaireObj,loading);
 				iphoneNav.open(resultWindow,{animated:'true'});
 			}else{
 				if (Questionnaire.prototype.quizBreadCrumps == Questionnaire.prototype.quizTracker){
+					//next question
+					loading.showLoading(quizWindow,'Loading...',0.5);
 					Questionnaire.prototype.nextQuestionnaireItem();
+					loading.hideLoading();
 				}else{
-					alert('not yet');
+					Ti.API.info('not yet');
 				}
 			}
 		}

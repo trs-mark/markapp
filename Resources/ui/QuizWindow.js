@@ -1,7 +1,7 @@
 /**
  * QuizWindow for iPhone
  */
-function QuizWindow(iphoneNav,windowTitle,start,end) {
+function QuizWindow(iphoneNav,windowTitle,start,end,loading) {
 	var btnBack = Ti.UI.createButton({
 		title:'back'
 	});
@@ -46,7 +46,7 @@ function QuizWindow(iphoneNav,windowTitle,start,end) {
 	var QuestionSet = require('models/QuestionSet');
 	var questionnaireObjArr = new QuestionSet(start,end);
 	
-	var quizView = questionnaire.getQuizView(iphoneNav,windowTitle,start,end,self,questionnaireObjArr);
+	var quizView = questionnaire.getQuizView(iphoneNav,windowTitle,start,end,self,questionnaireObjArr,loading);
 	
 	//add buttons
 	var btnLefts = [0,'20%','40%','60%','80%'];
@@ -67,6 +67,8 @@ function QuizWindow(iphoneNav,windowTitle,start,end) {
 	}
 	
 	self.add(quizView);
+	
+	loading.hideLoading();
 	return self;
 }
 

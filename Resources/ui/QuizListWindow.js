@@ -1,7 +1,7 @@
 /**
  * QuizListWindow for iPhone
  */
-function QuizListWindow(iphoneNav) {
+function QuizListWindow(iphoneNav,loading) {
 	var title= ['生化学過去問 1-20','生化学過去問 21-40','生化学過去問 41-60','生化学過去問 61-80','生化学過去問 81-100','生化学過去問 101-120','生化学過去問 121-140','生化学過去問 141-161','生化学過去問 1-5'];
 	var range= [{start:1,end:20},{start:21,end:40},{start:41,end:60},{start:61,end:80},{start:81,end:100},{start:101,end:120},{start:121,end:140},{start:141,end:161},{start:1,end:5}];
 	var self = Ti.UI.createWindow({
@@ -36,8 +36,9 @@ function QuizListWindow(iphoneNav) {
 			touchEnabled: false
 		}));
 		row.addEventListener('click', function(e){
+			loading.showLoading(self,'Loading...',1.0);
 			var QuizWindow = require('ui/QuizWindow');
-			var quizWindow = new QuizWindow(iphoneNav,e.source.children[0].text,e.source.customRange.start,e.source.customRange.end);
+			var quizWindow = new QuizWindow(iphoneNav,e.source.children[0].text,e.source.customRange.start,e.source.customRange.end,loading);
 			iphoneNav.open(quizWindow,{animated:true});
 		});
 		
@@ -53,6 +54,7 @@ function QuizListWindow(iphoneNav) {
 	
 	self.add(tableView);
 	
+	loading.hideLoading();
 	return self;
 }
 module.exports = QuizListWindow;
