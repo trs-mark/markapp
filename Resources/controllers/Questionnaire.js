@@ -39,7 +39,7 @@ Questionnaire.prototype.getQuizView = function(iphoneNav,chapterTitle,start,end,
 			}else{
 				if (Questionnaire.prototype.quizBreadCrumps == Questionnaire.prototype.quizTracker){
 					//next question
-					loading.showLoading(quizWindow,'Loading...',0.5);
+					loading.showLoading(quizWindow,'Loading...',0.9);
 					Questionnaire.prototype.nextQuestionnaireItem();
 					loading.hideLoading();
 				}else{

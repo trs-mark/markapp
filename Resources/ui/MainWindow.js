@@ -21,8 +21,9 @@ function MainWindow() {
 		});
 		verAlertDialog.addEventListener('click',function(event){
 			if(event.index == 0){
+				loading.showLoading(containerWindow,'Loading...',0.5);
 				WebViewerWindow = require('ui/WebViewerWindow');
-				var webViewerWindow = new WebViewerWindow();
+				var webViewerWindow = new WebViewerWindow(loading);
 				iphoneNav.open(webViewerWindow,{animated:true});
 			}
 		});

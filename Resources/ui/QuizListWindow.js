@@ -8,6 +8,9 @@ function QuizListWindow(iphoneNav,loading) {
 		title:'問題の選択',
 		backgroundImage:BG_PATH
 	});
+	self.addEventListener('postlayout',function(e){
+		loading.hideLoading();
+	});
 	
 	var rowData = [];
 	
@@ -54,7 +57,6 @@ function QuizListWindow(iphoneNav,loading) {
 	
 	self.add(tableView);
 	
-	loading.hideLoading();
 	return self;
 }
 module.exports = QuizListWindow;

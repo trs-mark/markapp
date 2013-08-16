@@ -15,8 +15,10 @@ function ResultWindow(iphoneNav,quizWindow,chapterTitle,userAnswers,correctCount
 		backgroundImage:IMG_PATH + 'bg.png',
 		leftNavButton: btnBack
 	});
-	self.addEventListener('open',function(e){
-		loading.hideLoading();
+	self.addEventListener('postlayout',function(e){
+		setTimeout(function(e){
+			loading.hideLoading();
+		},1000);
 	});
 	
 	var resultScrollView = Titanium.UI.createScrollView({
@@ -71,7 +73,7 @@ function ResultWindow(iphoneNav,quizWindow,chapterTitle,userAnswers,correctCount
 	// display quiz end number
 	var lblNumberOfItems = Titanium.UI.createLabel({
 		color:'#3F0000',
-		text: end,
+		text: userAnswers.length,
 		font:{fontSize:'38dp'},
 		top: '173dp',
 		left:(IS_ANDROID)?'30%': '90dp'

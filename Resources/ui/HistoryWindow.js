@@ -6,6 +6,9 @@ function HistoryWindow(iphoneNav,loading) {
 		backgroundImage:BG_PATH,
 		title:'履歴一覧'
 	});
+	self.addEventListener('postlayout',function(e){
+		loading.hideLoading();
+	});
 	
 	var QuizHistory = require('models/QuizHistory');
 	var quizHistory = new QuizHistory();
@@ -18,17 +21,18 @@ function HistoryWindow(iphoneNav,loading) {
 		//　create row
 		var row = Ti.UI.createTableViewRow({
 			customId: i,
-			height:'45dp',
+			height:Ti.UI.SIZE,
 			selectedBackgroundColor:'#015FE7',
 			backgroundColor:'#FFFFFF'
 		});
 		row.add(Ti.UI.createLabel({
 			color:'#3F0000',
-			text: history[i].chapterTitle,
+			text: history[i].chapterTitle +'\n' +
+					history[i].correctCount + '/' + history[i].questionCount + '\n' +
+					history[i].dateTime,
 			font:{fontSize:'20dp',},
 			top: '12dp',
 			left: '10dp',
-			height: 'auto',
 			touchEnabled: false
 		}));
 		row.add(Ti.UI.createImageView({
@@ -58,7 +62,6 @@ function HistoryWindow(iphoneNav,loading) {
 	
 	self.add(tableView);
 	
-	loading.hideLoading();
 	return self;
 }
 module.exports = HistoryWindow;

@@ -24,6 +24,9 @@ function QuizWindow(iphoneNav,windowTitle,start,end,loading) {
 		backgroundImage:(DEVICE_HEIGHT>=568)?IMG_PATH + 'chapter_quiz_bg_2_i5.png':IMG_PATH + 'chapter_quiz_bg_2.png',
 		leftNavButton: btnBack
 	});
+	self.addEventListener('postlayout',function(e){
+		loading.hideLoading();
+	});
 	
 	var Questionnaire = require('controllers/Questionnaire');
 	var questionnaire = new Questionnaire();
@@ -68,7 +71,6 @@ function QuizWindow(iphoneNav,windowTitle,start,end,loading) {
 	
 	self.add(quizView);
 	
-	loading.hideLoading();
 	return self;
 }
 

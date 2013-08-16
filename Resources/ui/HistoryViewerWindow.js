@@ -6,6 +6,11 @@ function HistoryViewerWindow(chapterTitle,dataObj,loading) {
 		title:chapterTitle,
 		backgroundImage:IMG_PATH + 'quiz_history_detail_bg.png'
 	});
+	self.addEventListener('postlayout',function(e){
+		setTimeout(function(e){
+			loading.hideLoading();
+		},1000);
+	});
 	
 	// create try again button
 	var btnRetry = Titanium.UI.createButton({
@@ -40,7 +45,6 @@ function HistoryViewerWindow(chapterTitle,dataObj,loading) {
 	
 	self.add(historyView);
 	
-	loading.hideLoading();
 	return self;
 }
 module.exports = HistoryViewerWindow;
