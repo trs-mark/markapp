@@ -53,7 +53,8 @@ function ResultWindow(iphoneNav,quizWindow,chapterTitle,userAnswers,correctCount
 		//QuizHistoryModel.saveQuizHistory(winParamObj.quiz_obj,Titanium.App.Properties.getString('ChapterTitle'));
 	//}
 	var QuizHistory = require('models/QuizHistory');
-	var quizHistory = new QuizHistory(chapterTitle,start,end,userAnswers,correctCount,mydate);
+	var quizHistory = new QuizHistory();
+	quizHistory.addQuizHistory(chapterTitle,start,end,userAnswers,correctCount,mydate);
 	
 	var lblChapterTitle = Titanium.UI.createLabel({
 		color:'#3F0000',
@@ -92,7 +93,7 @@ function ResultWindow(iphoneNav,quizWindow,chapterTitle,userAnswers,correctCount
 		right:'30dp',
 		height:'75dp'
 	});
-	if (Ti.Platform.osname === 'iphone') {btnRetry.top = '226dp';}
+	if (!IS_ANDROID) {btnRetry.top = '226dp';}
 	else{
 		btnRetry.backgroundSelectedImage = IMG_PATH + 'result_btn_tryagain_selected.png';
 		btnRetry.top = '235dp';

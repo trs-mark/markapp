@@ -2,8 +2,8 @@
  * QuizListWindow for iPhone
  */
 function QuizListWindow(iphoneNav) {
-	var title= ['生化学過去問 1-20','生化学過去問 21-40','生化学過去問 41-60','生化学過去問 61-80','生化学過去問 81-100','生化学過去問 101-120','生化学過去問 121-140','生化学過去問 141-161'];
-	var range= [{start:1,end:5},{start:21,end:40},{start:41,end:60},{start:61,end:80},{start:81,end:100},{start:101,end:120},{start:121,end:140},{start:141,end:161}]
+	var title= ['生化学過去問 1-20','生化学過去問 21-40','生化学過去問 41-60','生化学過去問 61-80','生化学過去問 81-100','生化学過去問 101-120','生化学過去問 121-140','生化学過去問 141-161','生化学過去問 1-5'];
+	var range= [{start:1,end:20},{start:21,end:40},{start:41,end:60},{start:61,end:80},{start:81,end:100},{start:101,end:120},{start:121,end:140},{start:141,end:161},{start:1,end:5}]
 	var self = Ti.UI.createWindow({
 		title:'問題の選択',
 		backgroundImage:BG_PATH

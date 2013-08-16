@@ -2,9 +2,27 @@
  * QuizWindow for iPhone
  */
 function QuizWindow(iphoneNav,windowTitle,start,end) {
+	var btnBack = Ti.UI.createButton({
+		title:'back'
+	});
+	btnBack.addEventListener('click',function(e){
+		var confirm = Titanium.UI.createAlertDialog({ 
+			message: '学習を終了しますか？',
+			buttonNames: ['OK','キャンセル'],
+			cancel: 1 
+		});
+		confirm.addEventListener('click',function(event){
+			if(event.index == 0){ 
+				iphoneNav.close(self,{animated:true}); 
+			}
+		});
+		confirm.show();	
+	});
+	
 	var self = Ti.UI.createWindow({
 		title:windowTitle,
-		backgroundImage:(DEVICE_HEIGHT>=568)?IMG_PATH + 'chapter_quiz_bg_2_i5.png':IMG_PATH + 'chapter_quiz_bg_2.png'
+		backgroundImage:(DEVICE_HEIGHT>=568)?IMG_PATH + 'chapter_quiz_bg_2_i5.png':IMG_PATH + 'chapter_quiz_bg_2.png',
+		leftNavButton: btnBack
 	});
 	
 	var Questionnaire = require('controllers/Questionnaire');

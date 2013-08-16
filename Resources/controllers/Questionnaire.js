@@ -107,6 +107,7 @@ Questionnaire.prototype.setQuestionnaire = function(){
 		text: Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].question.text,
 		font: {fontSize:'20dp'},
 		left: '3dp',
+		right:'3dp',
 		color:'black'
 	});
 	
