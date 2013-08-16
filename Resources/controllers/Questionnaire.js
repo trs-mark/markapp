@@ -2,16 +2,18 @@
  * ScrollView questionnaire
  */
 
-function Questionnaire() {}
+function Questionnaire() {
+	Questionnaire.prototype.theQuestionNumber = null;
+	Questionnaire.prototype.theQuestion = null;
+	Questionnaire.prototype.theChoices = [];
+}
 
-Questionnaire.prototype.theQuestionNumber = null;
-Questionnaire.prototype.theQuestion = null;
-Questionnaire.prototype.theChoices = [];
 /*
  * returns the contents of the questionnaire
  * @return {Ti.UI.ScrollView} quizView the questionnaire
  */
 Questionnaire.prototype.getQuizView = function(self,questionnaireObj){
+	Ti.API.info(JSON.stringify(questionnaireObj));
 	Questionnaire.prototype.quizView = Ti.UI.createScrollView({
 		top: '12dp',
 		left:'10dp',
@@ -24,7 +26,7 @@ Questionnaire.prototype.getQuizView = function(self,questionnaireObj){
 		var direction = (e.direction=='left')?'left':'right';
 		//alert('you swung ' + direction);
 		if (direction == 'left'){
-			if(Questionnaire.prototype.quizTracker >= 3){
+			if(Questionnaire.prototype.quizTracker >= Questionnaire.prototype.questionnaireObj.length){
 				alert('nothing');
 			}else{
 				Questionnaire.prototype.nextQuestionnaireItem();
@@ -52,14 +54,15 @@ Questionnaire.prototype.setQuestionnaire = function(){
 		layout:'horizontal'
 	});
 	var lblNumber = Ti.UI.createLabel({
-		text: (Questionnaire.prototype.quizTracker + 1) + '. ',
+		//text: (Questionnaire.prototype.quizTracker + 1) + '. ',
+		text: (Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].question.id) + '. ',
 		font: {fontSize:'20dp'},
 		top: 0,
 		left: 0,
 		color:'black'
 	});
 	var lblText = Ti.UI.createLabel({
-		text: Questionnaire.prototype.questionnaireObj.item[Questionnaire.prototype.quizTracker].question,
+		text: Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].question.text,
 		font: {fontSize:'20dp'},
 		left: '3dp',
 		color:'black'
@@ -71,8 +74,7 @@ Questionnaire.prototype.setQuestionnaire = function(){
 	newRow.add(lblNumber);
 	newRow.add(lblText);
 	Questionnaire.prototype.quizView.add(newRow);
-	
-	for (var a = 0; a<Questionnaire.prototype.questionnaireObj.item[Questionnaire.prototype.quizTracker].choices.length; a++){
+	for (var a = 0; a<Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices.length; a++){
 		var newRow = Ti.UI.createView({
 			top:'5dp',
 			left:'10dp',
@@ -89,7 +91,7 @@ Questionnaire.prototype.setQuestionnaire = function(){
 			color:'black'
 		});
 		var lblText = Ti.UI.createLabel({
-			text: Questionnaire.prototype.questionnaireObj.item[Questionnaire.prototype.quizTracker].choices[a],
+			text: Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[a].text,
 			font: {fontSize:'15dp'},
 			left:'5dp',
 			color:'black'
@@ -105,10 +107,11 @@ Questionnaire.prototype.setQuestionnaire = function(){
 }
 
 Questionnaire.prototype.nextQuestionnaireItem = function(){
-	Questionnaire.prototype.theQuestionNumber.text = (Questionnaire.prototype.quizTracker + 1) + '. ';
-	Questionnaire.prototype.theQuestion.text = Questionnaire.prototype.questionnaireObj.item[Questionnaire.prototype.quizTracker].question;
-	for (var x = 0; x<Questionnaire.prototype.questionnaireObj.item[Questionnaire.prototype.quizTracker].choices.length; x++){
-		Questionnaire.prototype.theChoices[x].text = Questionnaire.prototype.questionnaireObj.item[Questionnaire.prototype.quizTracker].choices[x];
+	//Questionnaire.prototype.theQuestionNumber.text = (Questionnaire.prototype.quizTracker + 1) + '. ';
+	Questionnaire.prototype.theQuestionNumber.text = (Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].question.id) + '. ';
+	Questionnaire.prototype.theQuestion.text = Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].question.text;
+	for (var x = 0; x<Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices.length; x++){
+		Questionnaire.prototype.theChoices[x].text = Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[x].text;
 	}
 	Questionnaire.prototype.quizTracker++;
 }

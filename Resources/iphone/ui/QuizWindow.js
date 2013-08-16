@@ -1,7 +1,7 @@
 /**
  * QuizWindow for iPhone
  */
-function QuizWindow(windowTitle) {
+function QuizWindow(windowTitle,start,end) {
 	var self = Ti.UI.createWindow({
 		title:windowTitle,
 		backgroundImage:(DEVICE_HEIGHT>=568)?IMG_PATH + 'chapter_quiz_bg_2_i5.png':IMG_PATH + 'chapter_quiz_bg_2.png'
@@ -9,23 +9,25 @@ function QuizWindow(windowTitle) {
 	
 	var Questionnaire = require('controllers/Questionnaire');
 	var questionnaire = new Questionnaire();
+	/*
 	var questionnaireObj = {
-		item:[
-			{
-				question:'What is 1st question adsfa adsfjk ad;f akf ;akjf kajf;l j;adj fakjsf kaj; jkadsjfa;jds fjak jfakjfladjsfkja?',
-				choices:['choice1','choice2asdfasdfsadfadsfadsfadsfasdfadsfafda','choice3']
-			},
-			{
-				question:'What is 2st question?',
-				choices:['choiceAadfssdfasdfasdfasdfasdfsdfasdfasdfadsfadsfasdfasdf','choiceB','choiceC']
-			},
-			{
-				question:'What is 3rd question adsjfa;lkj akdjsfaklj; akdfjalkjf lakj lajd slkafj ljafl jalkfjakf lsajfl jalfajldjfladjfl?',
-				choices:['uno','dos','tresasdfdsfsdafadfasdfasdfasdfasdfsdfasdfkjasdkfj;aksdjf;akjds;lkfja;lskdjf;lkajsd;lfjadsl;jfladjsf;sdjkf']
-			}
-		]
+		{
+			question:'What is 1st question adsfa adsfjk ad;f akf ;akjf kajf;l j;adj fakjsf kaj; jkadsjfa;jds fjak jfakjfladjsfkja?',
+			choices:['choice1','choice2asdfasdfsadfadsfadsfadsfasdfadsfafda','choice3']
+		},
+		{
+			question:'What is 2st question?',
+			choices:['choiceAadfssdfasdfasdfasdfasdfsdfasdfasdfadsfadsfasdfasdf','choiceB','choiceC']
+		},
+		{
+			question:'What is 3rd question adsjfa;lkj akdjsfaklj; akdfjalkjf lakj lajd slkafj ljafl jalkfjakf lsajfl jalfajldjfladjfl?',
+			choices:['uno','dos','tresasdfdsfsdafadfasdfasdfasdfasdfsdfasdfkjasdkfj;aksdjf;akjds;lkfja;lskdjf;lkajsd;lfjadsl;jfladjsf;sdjkf']
+		}
 	};
-	var quizView = questionnaire.getQuizView(self,questionnaireObj);
+	*/
+	var QuestionSet = require('models/QuestionSet');
+	var questionnaireObjArr = new QuestionSet(start,end);
+	var quizView = questionnaire.getQuizView(self,questionnaireObjArr);
 	
 	//add buttons
 	var btnLefts = [0,'20%','40%','60%','80%']
