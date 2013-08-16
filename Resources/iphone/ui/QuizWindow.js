@@ -49,7 +49,7 @@ function QuizWindow(iphoneNav,windowTitle,start,end) {
 	var quizView = questionnaire.getQuizView(iphoneNav,windowTitle,start,end,self,questionnaireObjArr);
 	
 	//add buttons
-	var btnLefts = [0,'20%','40%','60%','80%']
+	var btnLefts = [0,'20%','40%','60%','80%'];
 	for (var i=0; i<btnLefts.length; i++){
 		var btnChoice = Titanium.UI.createButton({
 			customButtonId: i,

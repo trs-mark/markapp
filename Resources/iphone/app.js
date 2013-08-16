@@ -54,7 +54,7 @@ var convert = function(quest){
 		}
 	}
 	return q;
-}
+};
 
 try{
 var db = Ti.Database.install('eiyoushi.sqlite', DB_NAME);
