@@ -67,5 +67,5 @@ function Reviewer(listView, questionnaireObj, userAnswers){
 			listView.add(newRow);
 		}
 	}
-}
+};
 module.exports = Reviewer;

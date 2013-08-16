@@ -29,14 +29,14 @@ var MemoList = function(){
 		}
 		rows.close();
 		return memoList;
-	}
+	};
 
 	this._init = function(){
 		if (Ti.Platform.osname!=='iphone') {Ti.include('../common/common.js');}
 		
 		return self;
-	}	
+	};
 	return this._init();
-}
+};
 
 module.exports = MemoList;

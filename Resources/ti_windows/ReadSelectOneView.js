@@ -215,7 +215,7 @@ function arrow(sv){
 	sv.hideArrow = function() {
 		left.hide();
 		right.hide();
-	}
+	};
 	
 	// show the arrow images
 	sv.showArrow = function(index, allCount) {
@@ -236,7 +236,7 @@ function arrow(sv){
 			left.hide();
 			right.hide();
 		}
-	}
+	};
 	
 }
 
@@ -343,13 +343,13 @@ function threeButton(winParamObj, sv, i){
 		b1.show();
 		b2.show();
 		b3.show();
-	}
+	};
 	sv.hideMenu = function() {
 		btn_bg.hide();
 		b1.hide();
 		b2.hide();
 		b3.hide();
-	}
+	};
 }
 
 // create two-button menu bar
@@ -428,11 +428,11 @@ function twoButton(winParamObj, sv, i){
 		btn_bg.show();
 		b1.show();
 		b2.show();
-	}
+	};
 
 	sv.hideMenu = function() {
 		btn_bg.hide();
 		b1.hide();
 		b2.hide();
-	}
-}
+	};
+};

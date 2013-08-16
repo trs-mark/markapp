@@ -24,7 +24,7 @@ function QuizSelectOneList () {
 	this.getNextQuiz = function() {
 		self.now_step ++;
 		return self.quiz_list[self.now_step - 1];
-	}
+	};
 
 	this.getCorrect = function (selected_id) {
 		var nowObj = self.quiz_list[self.now_step - 1];
@@ -34,16 +34,16 @@ function QuizSelectOneList () {
 			self.correct_count ++;
 		}
 		return nowObj.correct;
-	}
+	};
 
 	this.getCorrectCount = function (){
 		return self.correct_count;
-	}
+	};
 	
 	this.restorQuizSelectOneList = function(jsonString) {
 		var quiz_obj = JSON.parse(jsonString);
 		self.quiz_list = quiz_obj.quiz_list;
-	}
+	};
 	
 	this.quizSelectOneList4retry = function() {
 		var incorrect_list = new Array();
@@ -57,7 +57,7 @@ function QuizSelectOneList () {
 		self.correct_count = 0;
 		self.now_step = 0;
 		self.retryFlg = true;
-	}
+	};
 	
 	this._init = function(){
 
@@ -141,7 +141,7 @@ function QuizSelectOneList () {
 		}
 
 		return self;
-	}
+	};
 	
 	return this._init();
 }

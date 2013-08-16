@@ -112,7 +112,7 @@ function ResultWindow(iphoneNav,quizWindow,chapterTitle,userAnswers,correctCount
 		borderColor:'blue',
 		borderWidth:2
 	});
-	var Reviewer = require('controllers/reviewer');
+	var Reviewer = require('controllers/Reviewer');
 	var reviewr = new Reviewer(listView,questionnaireObj,userAnswers);
 	resultScrollView.add(listView);
 	

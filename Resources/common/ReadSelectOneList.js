@@ -9,15 +9,15 @@ function ReadSelectOneList () {
 	
 	this.getNextPage = function() {
 		self.now_step++;
-	}
+	};
 	
 	this.getPrevPage = function() {
 		self.now_step--;
-	}
+	};
 	
 	this.getPage = function(i){
 		self.now_step = i;
-	}
+	};
 
 	return self;
 }

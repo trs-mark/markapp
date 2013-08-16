@@ -22,7 +22,7 @@ function AddMemoView(winParamObj) {
 		bottom: '15dp',
 		width:'280dp',
 		showVerticalScrollIndicator:true
-	})
+	});
 	if (Ti.Platform.osname === 'iphone') {s.top = '12dp';}
   	else{s.top = '70dp';}
 	self.add(s);
@@ -41,7 +41,6 @@ function AddMemoView(winParamObj) {
 		text.softKeyboardOnFocus = Titanium.UI.Android.SOFT_KEYBOARD_SHOW_ON_FOCUS;
 		text.height = 'auto';
 		text.top =  '1dp';
-		text.so
   	}
   	
     var page = winParamObj.quiz_obj.now_step;

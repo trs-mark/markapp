@@ -16,7 +16,7 @@ function QuizCommentaryView(winParamObj) {
 		parent_window_rightbutton : null
 	});
 //	var pheight=Titanium.Platform.displayCaps.platformHeight / (Titanium.Platform.displayCaps.dpi / 160);
-	var pheight=Titanium.Platform.displayCaps.platformHeight
+	var pheight=Titanium.Platform.displayCaps.platformHeight;
 	if(pheight < 800){
 		var btm ='95dp';
 	}else{
@@ -151,7 +151,7 @@ function QuizCommentaryView(winParamObj) {
 		backgroundColor: 'transparent',
 		separatorColor: 'transparent',
 		scrollable : false
-	})
+	});
 	row2.add(s);
 
 	// displays quiz item no

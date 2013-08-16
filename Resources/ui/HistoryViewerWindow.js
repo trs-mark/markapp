@@ -34,7 +34,7 @@ function HistoryViewerWindow(chapterTitle,dataObj) {
 	var QuestionSet = require('models/QuestionSet');
 	var questionnaireObjArr = new QuestionSet(dataObj.start,dataObj.end);
 	
-	var Reviewer = require('controllers/reviewer');
+	var Reviewer = require('controllers/Reviewer');
 	Ti.API.info(dataObj.answers);
 	var reviewr = new Reviewer(historyView,questionnaireObjArr,dataObj.answers);
 	

@@ -22,7 +22,7 @@ function WindowParam(view_file) {
 	this._init = function(view_file){
 		self.view_file = 'ti_windows/' + view_file;
 		return self;
-	}
+	};
 	return this._init(view_file);
 }
 module.exports = WindowParam;

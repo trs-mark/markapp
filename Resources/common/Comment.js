@@ -36,14 +36,14 @@ var Comment = function(){
 		}
 		rows.close();
 		return comment;
-	}
+	};
 	
 	this._init = function(){
 		if (Ti.Platform.osname!=='iphone') {Ti.include('../common/common.js');}
 		
 		return self;
-	}	
+	};
 	return this._init();
-}
+};
 
 module.exports = Comment;

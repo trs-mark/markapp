@@ -34,7 +34,7 @@ QuizHistory.prototype.addQuizHistory = function(chapterTitle,start,end,userAnswe
 	}
 	
 	db.close();
-}
+};
 
 QuizHistory.prototype.getQuizHistory = function(){
 	var quizHistory = [];
@@ -66,6 +66,6 @@ QuizHistory.prototype.getQuizHistory = function(){
 	db.close();
 	
 	return quizHistory;
-}
+};
 
 module.exports = QuizHistory;

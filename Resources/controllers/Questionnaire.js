@@ -48,7 +48,7 @@ Questionnaire.prototype.getQuizView = function(iphoneNav,chapterTitle,start,end,
 	Questionnaire.prototype.setQuestionnaire();
 	
 	return Questionnaire.prototype.quizView;
-}
+};
 
 /*
  * evaluates the answer if it is correct or wrong
@@ -81,7 +81,7 @@ Questionnaire.prototype.evaluateAnswer = function(choice){
 		result = 'no more';
 	}
 	return result;
-}
+};
 
 /*
  * Sets the contents of the questionnaire
@@ -148,7 +148,7 @@ Questionnaire.prototype.setQuestionnaire = function(){
 	}
 	
 	Questionnaire.prototype.quizTracker++;
-}
+};
 
 Questionnaire.prototype.nextQuestionnaireItem = function(){
 	//Questionnaire.prototype.theQuestionNumber.text = (Questionnaire.prototype.quizTracker + 1) + '. ';
@@ -159,7 +159,7 @@ Questionnaire.prototype.nextQuestionnaireItem = function(){
 		Questionnaire.prototype.theChoices[x].color = (Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[x].stateStr==='CORRECT')?'pink':'black';
 	}
 	Questionnaire.prototype.quizTracker++;
-}
+};
 
 Questionnaire.prototype.cleanQuestionnaire = function(){
 	var viewname = Questionnaire.prototype.quizView;
@@ -168,6 +168,6 @@ Questionnaire.prototype.cleanQuestionnaire = function(){
 			viewname.remove(viewname.children[d]);
 		}
 	}
-}
+};
 
 module.exports = Questionnaire;

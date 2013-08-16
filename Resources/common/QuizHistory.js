@@ -30,7 +30,7 @@ var QuizHistory = function(){
 		}
 		rows.close();
 		return historyList;
-	}
+	};
 
 	this.saveQuizHistory = function(QuizSelectOne,chapT){
 		
@@ -55,14 +55,14 @@ var QuizHistory = function(){
 		db.close();
 		db = null;
 		return;
-	}
+	};
 
 	this._init = function(){
 		if (Ti.Platform.osname!=='iphone') {Ti.include('../common/common.js');}
 		
 		return self;
-	}	
+	};
 	return this._init();
-}
+};
 
 module.exports = QuizHistory;

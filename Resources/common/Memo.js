@@ -28,7 +28,7 @@ var Memo = function(){
 		}
 		rows.close();
 		return memo;
-	}
+	};
 
 	this.saveMemo = function(page, text){
 		var db;
@@ -47,7 +47,7 @@ var Memo = function(){
 		db.close();
 		db = null;
 		return;
-	}
+	};
 	
 	this.updateMemo = function(page, text){
 		var db;
@@ -67,7 +67,7 @@ var Memo = function(){
 		db.close();
 		db = null;
 		return;
-	}
+	};
 	
 	this.deleteMemo = function(page, text){
 		var db;
@@ -87,7 +87,7 @@ var Memo = function(){
 		db.close();
 		db = null;
 		return;
-	}
+	};
 	
 	this._init = function(){
 		if (Ti.Platform.osname!=='iphone') {
@@ -95,8 +95,8 @@ var Memo = function(){
 			Ti.include('../common/Memo.js');
 		} 
 		return self;
-	}	
+	};
 	return this._init();
-}
+};
 
 module.exports = Memo;

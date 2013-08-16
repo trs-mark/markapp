@@ -83,7 +83,7 @@ function QuizHistoryDetailView(winParamObj) {
 			backgroundColor: 'transparent',
 			separatorColor: 'transparent',
 			scrollable : false
-		})
+		});
 		row.add(s);
 			
 		// displays quiz item no

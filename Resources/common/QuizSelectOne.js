@@ -41,7 +41,7 @@ function QuizSelectOne(question, ansewerList) {
 		}
 		self.questions = shuffle(questions);
 		return self;
-	}
+	};
 	
 	return this._init(question, ansewerList);
 }

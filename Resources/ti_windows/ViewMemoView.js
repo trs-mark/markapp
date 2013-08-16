@@ -23,7 +23,7 @@ function ViewMemoView(winParamObj) {
 		bottom: '15dp',
 		width: '280dp',
 		showVerticalScrollIndicator:true
-	})
+	});
 	self.add(s);
 	
 	var Memo = require('common/Memo');

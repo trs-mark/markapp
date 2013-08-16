@@ -457,7 +457,7 @@ function ArrangementDate(now) {
 		if(self.min < 10) { self.min = "0" + self.min; }
 		if(self.sec < 10) { self.sec = "0" + self.sec; }
 		return self;
-	}	
+	};
 	return this._init(now);
 }
 

@@ -114,7 +114,7 @@ function QuizSelectOneView(winParamObj) {
 		showVerticalScrollIndicator:true,
 		backgroundColor: 'transparent',
 		separatorColor: 'transparent'
-	})
+	});
 	x.add(s);
 	// displays quiz item no
 	
