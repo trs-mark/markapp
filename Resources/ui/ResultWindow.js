@@ -1,7 +1,7 @@
 /**
  * ResultWindow for iPhone
  */
-function ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,userAnswers,correctCount,start,end,questionnaireObj,willSave,loading) {
+function ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,userAnswers,correctCount,start,end,questionnaireObj,mistakesObjArr,willSave,loading) {
 	var btnBack = Ti.UI.createButton({
 		title:'戻る'
 	});
@@ -53,7 +53,7 @@ function ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,userAnswers,correctCou
 	if(willSave){
 		var QuizHistory = require('models/QuizHistory');
 		var quizHistory = new QuizHistory();
-		quizHistory.addQuizHistory(GLOBAL,chapterTitle,start,questionnaireObj,end,userAnswers,correctCount,mydate);
+		quizHistory.addQuizHistory(GLOBAL,chapterTitle,start,questionnaireObj,mistakesObjArr,end,userAnswers,correctCount,mydate);
 	}
 	
 	var lblChapterTitle = Titanium.UI.createLabel({
@@ -104,7 +104,7 @@ function ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,userAnswers,correctCou
 			loading.showLoading(self,'Loading...',1.0);
 			var QuizWindow = require('ui/QuizWindow');
 			var willSave = false;
-			var retryQuizWindow = new QuizWindow(GLOBAL,navi,chapterTitle,start,end,willSave,loading);
+			var retryQuizWindow = new QuizWindow(GLOBAL,navi,chapterTitle,start,end,willSave,loading,mistakesObjArr);
 			if(GLOBAL.IS_ANDROID){
 				navi.isQuiz = true;
 				navi.retryOpen(retryQuizWindow,{animated:true});
@@ -126,7 +126,7 @@ function ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,userAnswers,correctCou
 		height:Ti.UI.SIZE,
 		layout:'vertical',
 		backgroundColor: 'white',
-		borderColor:'blue',
+		borderColor:'#3868AC',
 		borderWidth:2
 	});
 	var Reviewer = require('controllers/Reviewer');

@@ -1,7 +1,7 @@
 /**
  * QuizWindow for iPhone
  */
-function QuizWindow(GLOBAL,navi,windowTitle,start,end,willSave,loading) {
+function QuizWindow(GLOBAL,navi,windowTitle,start,end,willSave,loading,questionnaireObj) {
 	var btnBack = Ti.UI.createButton({
 		title:'戻る'
 	});
@@ -52,8 +52,14 @@ function QuizWindow(GLOBAL,navi,windowTitle,start,end,willSave,loading) {
 		}
 	};
 	*/
-	var QuestionSet = require('models/QuestionSet');
-	var questionnaireObjArr = new QuestionSet(GLOBAL,start,end);
+	var questionnaireObjArr = [];
+	if(questionnaireObj){
+		questionnaireObjArr = questionnaireObj;
+	}else{
+		var QuestionSet = require('models/QuestionSet');
+		questionnaireObjArr = new QuestionSet(GLOBAL,start,end);
+	}
+	Ti.API.info('questionnaireObjArr:'+JSON.stringify(questionnaireObjArr));
 	
 	var quizView = questionnaire.getQuizView(GLOBAL,navi,windowTitle,start,end,self,questionnaireObjArr,willSave,loading);
 	

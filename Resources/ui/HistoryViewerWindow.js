@@ -53,7 +53,7 @@ function HistoryViewerWindow(GLOBAL,navi,chapterTitle,dataObj,showRetry,loading)
 			loading.showLoading(self,'Loading...',1.0);
 			var QuizWindow = require('ui/QuizWindow');
 			var willSave = false;
-			var quizWindow = new QuizWindow(GLOBAL,navi,chapterTitle,dataObj.start,dataObj.end,willSave,loading);
+			var quizWindow = new QuizWindow(GLOBAL,navi,chapterTitle,dataObj.start,dataObj.end,willSave,loading,dataObj.mistakesObjArr);
 			if(GLOBAL.IS_ANDROID){
 				navi.isQuiz = true;
 			}

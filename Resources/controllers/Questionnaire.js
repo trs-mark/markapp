@@ -43,7 +43,13 @@ Questionnaire.prototype.getQuizView = function(GLOBAL,navi,chapterTitle,start,en
 				//go to result
 				loading.showLoading(quizWindow,'Loading...',1.0);
 				var ResultWindow = require('ui/ResultWindow');
-				var resultWindow = new ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,Questionnaire.prototype.userAnswers,Questionnaire.prototype.correctCount,start,end,Questionnaire.prototype.questionnaireObj,willSave,loading);
+				var resultWindow = new ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,
+					Questionnaire.prototype.userAnswers,
+					Questionnaire.prototype.correctCount,
+					start,end,
+					Questionnaire.prototype.questionnaireObj,
+					Questionnaire.prototype.mistakesObjArr,
+					willSave,loading);
 				if(GLOBAL.IS_ANDROID){
 					navi.isResult = true;
 					navi.isQuiz = false;
@@ -63,6 +69,7 @@ Questionnaire.prototype.getQuizView = function(GLOBAL,navi,chapterTitle,start,en
 	});
 	
 	Questionnaire.prototype.questionnaireObj = questionnaireObj;
+	Questionnaire.prototype.mistakesObjArr = [];
 	Questionnaire.prototype.setQuestionnaire(GLOBAL);
 	
 	return Questionnaire.prototype.quizView;
@@ -86,6 +93,11 @@ Questionnaire.prototype.evaluateAnswer = function(GLOBAL,choice){
 		Questionnaire.prototype.userAnswers.push(choice);
 		if (stateStr === 'CORRECT'){
 			Questionnaire.prototype.correctCount++;
+		}else{
+			Questionnaire.prototype.mistakesObjArr.push({
+				question: Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker-1].question,
+				choices: Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker-1].choices
+			});
 		}
 		result = 'you selected ' + choice +
 				'\nid:' + id +
