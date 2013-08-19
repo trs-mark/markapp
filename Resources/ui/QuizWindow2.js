@@ -1,10 +1,10 @@
 /**
  * QuizWindow for iPhone
  */
-function QuizWindow(GLOBAL,navi,windowTitle,start,end,willSave,loading,questionnaireObj) {
+function QuizWindow(GLOBAL,iphoneNav,windowTitle,start,end,loading) {
 	var btnclik=1;
 	var btnBack = Ti.UI.createButton({
-		title:'戻る'
+		title:'back'
 	});
 	btnBack.addEventListener('click',function(e){
 		var confirm = Titanium.UI.createAlertDialog({ 
@@ -14,10 +14,10 @@ function QuizWindow(GLOBAL,navi,windowTitle,start,end,willSave,loading,questionn
 		});
 		confirm.addEventListener('click',function(event){
 			if(event.index == 0){ 
-				navi.close(self,{animated:true}); 
+				iphoneNav.close(self,{animated:true}); 
 			}
 		});
-		confirm.show();
+		confirm.show();	
 	});
 	
 	var self = Ti.UI.createWindow({
@@ -48,20 +48,12 @@ function QuizWindow(GLOBAL,navi,windowTitle,start,end,willSave,loading,questionn
 		}
 	};
 	*/
-	var questionnaireObjArr = [];
-	if(questionnaireObj){
-		questionnaireObjArr = questionnaireObj;
-	}else{
-		var QuestionSet = require('models/QuestionSet');
-		questionnaireObjArr = new QuestionSet(GLOBAL,start,end);
-	}
-	Ti.API.info('questionnaireObjArr:'+JSON.stringify(questionnaireObjArr));
-	
-	
-	var setSwip = questionnaire.setSwipe(GLOBAL);
+	var QuestionSet = require('models/QuestionSet');
+	var questionnaireObjArr = new QuestionSet(GLOBAL,start,end);
+	var setSwip = questionnaire.setSwipe();
 	//add buttons
 	var results='';
-	var buttonC = [];
+	var buttonC = new Object();
 	var btnLefts = [0,'20%','40%','60%','80%'];
 	for (var i=0; i<btnLefts.length; i++){
 		var btnChoice = Titanium.UI.createButton({
@@ -75,10 +67,9 @@ function QuizWindow(GLOBAL,navi,windowTitle,start,end,willSave,loading,questionn
 		});
 		buttonC[i+1]=btnChoice;
 		btnChoice.addEventListener('click',function(e){
-			//Ti.API.info(questionnaire.evaluateAnswer(GLOBAL,e.source.customButtonId));
 			var x =questionnaire.clickFlag;
 			if(x==0){
-				results=questionnaire.evaluateAnswer(GLOBAL,e.source.customButtonId,buttonC);
+				results=questionnaire.evaluateAnswer(e.source.customButtonId,buttonC);
 				var correctB =buttonC[results[0].correct_id];
 				var selectB =buttonC[results[0].selected_ID];
 				if(results[0].selected_ID==results[0].correct_id){
@@ -88,13 +79,15 @@ function QuizWindow(GLOBAL,navi,windowTitle,start,end,willSave,loading,questionn
 					selectB.backgroundImage = GLOBAL.IMG_PATH + (results[0].selected_ID) + '_bx.png';
 				}
 				x=1;
-				setSwip.swipe.setVisible(true);
-				setSwip.comment.setVisible(true);
+					setSwip.swipe.setVisible(true);
+					setSwip.comment.setVisible(true);
+
 			}
+			
 		});
 		self.add(btnChoice);
 	}
-	var quizView = questionnaire.getQuizView(GLOBAL,navi,windowTitle,start,end,self,questionnaireObjArr,willSave,buttonC,loading);
+	var quizView = questionnaire.getQuizView(GLOBAL,iphoneNav,windowTitle,start,end,self,questionnaireObjArr,loading,buttonC);
 	self.add(quizView);
 	self.add(setSwip.swipe);
 	self.add(setSwip.comment);

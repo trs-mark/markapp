@@ -27,7 +27,7 @@ ActivityIndicator.prototype.createActInd = function(win, message, transparency){
 	var vCover = Ti.UI.createView({
 		backgroundColor:'#4C4C4C',
 		opacity: transparency,
-		zIndex:1
+		zIndex:1000
 	});
 	if(ActivityIndicator.prototype.osname==='iphone' || ActivityIndicator.prototype.osname==='ipad'){
 		vCover.add(actInd);

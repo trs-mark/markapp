@@ -109,9 +109,10 @@ function ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,userAnswers,correctCou
 				navi.isQuiz = true;
 				navi.retryOpen(retryQuizWindow,{animated:true});
 			}else{
+				
+				navi.open(retryQuizWindow,{animated:true});
 				navi.close(quizWindow,{animated:true});
 				navi.close(self,{animated:true});
-				navi.open(retryQuizWindow,{animated:true});
 			}
 		});
 		infoView.add(btnRetry);

@@ -38,7 +38,7 @@ function MainWindow(GLOBAL) {
 	var baseWindow = Ti.UI.createWindow({
 		backgroundColor: '#eeebdf',
 		exitOnClose:true,
-		navBarHidden:false,
+		navBarHidden:(GLOBAL.IS_ANDROID),
 		title: 'トップメニュー MKI',
 		orientation: Ti.UI.PORTRAIT,
 		rightNavButton: btnInfo,

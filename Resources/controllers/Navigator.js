@@ -45,9 +45,11 @@ function Navigator(GLOBAL,baseWindow) {
 							cancel: 1 
 						});
 						confirm.addEventListener('click',function(event){
-							var lastWin = navi.stack.pop();
-							lastWin.close();
-							navi.isQuiz = false;
+							if(event.index == 0){ 
+								var lastWin = navi.stack.pop();
+								lastWin.close();
+								navi.isQuiz = false;
+							}
 						});
 						confirm.show();
 					}else{
