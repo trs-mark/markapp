@@ -13,9 +13,9 @@ function QuizHistory() {
  * @param {Date} dateTime the date time object when user finished the quiz
  */
 
-QuizHistory.prototype.addQuizHistory = function(chapterTitle,start,end,userAnswers,correctCount,dateTime){
+QuizHistory.prototype.addQuizHistory = function(GLOBAL,chapterTitle,start,end,userAnswers,correctCount,dateTime){
 	try{
-		var db = Ti.Database.install('eiyoushi.sqlite', DB_NAME);
+		var db = Ti.Database.install('eiyoushi.sqlite', GLOBAL.DB_NAME);
 	}catch(e){
 		alert('cannot install database');
 	}
@@ -36,10 +36,10 @@ QuizHistory.prototype.addQuizHistory = function(chapterTitle,start,end,userAnswe
 	db.close();
 };
 
-QuizHistory.prototype.getQuizHistory = function(){
+QuizHistory.prototype.getQuizHistory = function(GLOBAL){
 	var quizHistory = [];
 	try{
-		var db = Ti.Database.install('eiyoushi.sqlite', DB_NAME);
+		var db = Ti.Database.install('eiyoushi.sqlite', GLOBAL.DB_NAME);
 	}catch(e){
 		alert('cannot install database');
 	}

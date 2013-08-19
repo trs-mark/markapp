@@ -1,7 +1,7 @@
 /**
  * ResultWindow for iPhone
  */
-function ResultWindow(iphoneNav,quizWindow,chapterTitle,userAnswers,correctCount,start,end,questionnaireObj,loading) {
+function ResultWindow(GLOBAL,iphoneNav,quizWindow,chapterTitle,userAnswers,correctCount,start,end,questionnaireObj,loading) {
 	var btnBack = Ti.UI.createButton({
 		title:'戻る'
 	});
@@ -11,14 +11,13 @@ function ResultWindow(iphoneNav,quizWindow,chapterTitle,userAnswers,correctCount
 	});
 	
 	var self = Ti.UI.createWindow({
+		exitOnClose:false,
 		title:'結果表示',
-		backgroundImage:IMG_PATH + 'bg.png',
+		backgroundImage:GLOBAL.IMG_PATH + 'bg.png',
 		leftNavButton: btnBack
 	});
 	self.addEventListener('postlayout',function(e){
-		setTimeout(function(e){
-			loading.hideLoading();
-		},1000);
+		loading.hideLoading();
 	});
 	
 	var resultScrollView = Titanium.UI.createScrollView({
@@ -31,7 +30,7 @@ function ResultWindow(iphoneNav,quizWindow,chapterTitle,userAnswers,correctCount
 	});
 	
 	var imgResult = Titanium.UI.createImageView({
-		image:IMG_PATH + 'result.png',
+		image:GLOBAL.IMG_PATH + 'result.png',
 		top:'0dp',
 		width:'304dp',
 		height:'240dp'
@@ -59,14 +58,14 @@ function ResultWindow(iphoneNav,quizWindow,chapterTitle,userAnswers,correctCount
 	//}
 	var QuizHistory = require('models/QuizHistory');
 	var quizHistory = new QuizHistory();
-	quizHistory.addQuizHistory(chapterTitle,start,end,userAnswers,correctCount,mydate);
+	quizHistory.addQuizHistory(GLOBAL,chapterTitle,start,end,userAnswers,correctCount,mydate);
 	
 	var lblChapterTitle = Titanium.UI.createLabel({
 		color:'#3F0000',
 		text: chapterTitle,
 		font:{fontSize:'20dp'},
 		top: '113dp',
-		left: (IS_ANDROID)?'12%':'20dp',
+		left: (GLOBAL.IS_ANDROID)?'12%':'20dp',
 	});
 	infoView.add(lblChapterTitle);
 	
@@ -76,7 +75,7 @@ function ResultWindow(iphoneNav,quizWindow,chapterTitle,userAnswers,correctCount
 		text: userAnswers.length,
 		font:{fontSize:'38dp'},
 		top: '173dp',
-		left:(IS_ANDROID)?'30%': '90dp'
+		left:(GLOBAL.IS_ANDROID)?'30%': '90dp'
 	});
 	infoView.add(lblNumberOfItems);
 	
@@ -86,21 +85,21 @@ function ResultWindow(iphoneNav,quizWindow,chapterTitle,userAnswers,correctCount
 		text: correctCount,
 		font:{fontSize:'38dp'},
 		top: '173dp',
-		left:(IS_ANDROID)?'60%': '195dp',
+		left:(GLOBAL.IS_ANDROID)?'60%': '195dp',
 		height: 'auto'
 	});
 	infoView.add(lblCorrectCount);
 	
 	//  create try again button
 	var btnRetry = Titanium.UI.createButton({
-		backgroundImage:IMG_PATH + 'result_btn_tryagain.png',
+		backgroundImage:GLOBAL.IMG_PATH + 'result_btn_tryagain.png',
 		left:'30dp',
 		right:'30dp',
 		height:'75dp'
 	});
-	if (!IS_ANDROID) {btnRetry.top = '226dp';}
+	if (!GLOBAL.IS_ANDROID) {btnRetry.top = '226dp';}
 	else{
-		btnRetry.backgroundSelectedImage = IMG_PATH + 'result_btn_tryagain_selected.png';
+		btnRetry.backgroundSelectedImage = GLOBAL.IMG_PATH + 'result_btn_tryagain_selected.png';
 		btnRetry.top = '235dp';
 	}
 	infoView.add(btnRetry);
@@ -118,7 +117,7 @@ function ResultWindow(iphoneNav,quizWindow,chapterTitle,userAnswers,correctCount
 		borderWidth:2
 	});
 	var Reviewer = require('controllers/Reviewer');
-	var reviewr = new Reviewer(listView,questionnaireObj,userAnswers);
+	var reviewr = new Reviewer(GLOBAL,listView,questionnaireObj,userAnswers);
 	resultScrollView.add(listView);
 	
 	self.add(resultScrollView);

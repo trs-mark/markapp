@@ -16,7 +16,7 @@ function Questionnaire() {
  * returns the contents of the questionnaire
  * @return {Ti.UI.ScrollView} quizView the questionnaire
  */
-Questionnaire.prototype.getQuizView = function(iphoneNav,chapterTitle,start,end,quizWindow,questionnaireObj,loading){
+Questionnaire.prototype.getQuizView = function(GLOBAL,iphoneNav,chapterTitle,start,end,quizWindow,questionnaireObj,loading){
 	Ti.API.info(JSON.stringify(questionnaireObj));
 	Questionnaire.prototype.quizView = Ti.UI.createScrollView({
 		top: '12dp',
@@ -34,13 +34,17 @@ Questionnaire.prototype.getQuizView = function(iphoneNav,chapterTitle,start,end,
 				//go to result
 				loading.showLoading(quizWindow,'Loading...',1.0);
 				var ResultWindow = require('ui/ResultWindow');
-				var resultWindow = new ResultWindow(iphoneNav,quizWindow,chapterTitle,Questionnaire.prototype.userAnswers,Questionnaire.prototype.correctCount,start,end,Questionnaire.prototype.questionnaireObj,loading);
-				iphoneNav.open(resultWindow,{animated:'true'});
+				var resultWindow = new ResultWindow(GLOBAL,iphoneNav,quizWindow,chapterTitle,Questionnaire.prototype.userAnswers,Questionnaire.prototype.correctCount,start,end,Questionnaire.prototype.questionnaireObj,loading);
+				if(GLOBAL.IS_ANDROID){
+					iphoneNav.isResult = true;
+					iphoneNav.isQuiz = false;
+				}
+				iphoneNav.open(resultWindow,{animated:true});
 			}else{
 				if (Questionnaire.prototype.quizBreadCrumps == Questionnaire.prototype.quizTracker){
 					//next question
 					loading.showLoading(quizWindow,'Loading...',0.9);
-					Questionnaire.prototype.nextQuestionnaireItem();
+					Questionnaire.prototype.nextQuestionnaireItem(GLOBAL);
 					loading.hideLoading();
 				}else{
 					Ti.API.info('not yet');
@@ -50,7 +54,7 @@ Questionnaire.prototype.getQuizView = function(iphoneNav,chapterTitle,start,end,
 	});
 	
 	Questionnaire.prototype.questionnaireObj = questionnaireObj;
-	Questionnaire.prototype.setQuestionnaire();
+	Questionnaire.prototype.setQuestionnaire(GLOBAL);
 	
 	return Questionnaire.prototype.quizView;
 };
@@ -60,7 +64,7 @@ Questionnaire.prototype.getQuizView = function(iphoneNav,chapterTitle,start,end,
  * @param {int} choice the choice button clicked by the user
  * @return {boolean} result whether answer is correct or wrong
  */
-Questionnaire.prototype.evaluateAnswer = function(choice){
+Questionnaire.prototype.evaluateAnswer = function(GLOBAL,choice){
 	var result = '';
 	if (Questionnaire.prototype.quizBreadCrumps < Questionnaire.prototype.quizTracker){
 		var selectedChoice = Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker-1].choices[choice];
@@ -92,7 +96,7 @@ Questionnaire.prototype.evaluateAnswer = function(choice){
  * Sets the contents of the questionnaire
  * @param {Ti.UI.ScrollView} quizView the questionnaire to modify the contents
  */
-Questionnaire.prototype.setQuestionnaire = function(){
+Questionnaire.prototype.setQuestionnaire = function(GLOBAL){
 	var newRow = Ti.UI.createView({
 		left:'10dp',
 		//backgroundColor: 'blue',
@@ -139,7 +143,7 @@ Questionnaire.prototype.setQuestionnaire = function(){
 			color:'black'
 		});
 		var lblText = Ti.UI.createLabel({
-			text: convert(Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[a].text),
+			text: GLOBAL.CONVERT(Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[a].text),
 			font: {fontSize:'15dp'},
 			left:'5dp',
 			right:'5dp',
@@ -155,12 +159,12 @@ Questionnaire.prototype.setQuestionnaire = function(){
 	Questionnaire.prototype.quizTracker++;
 };
 
-Questionnaire.prototype.nextQuestionnaireItem = function(){
+Questionnaire.prototype.nextQuestionnaireItem = function(GLOBAL){
 	//Questionnaire.prototype.theQuestionNumber.text = (Questionnaire.prototype.quizTracker + 1) + '. ';
 	Questionnaire.prototype.theQuestionNumber.text = (Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].question.id) + '. ';
 	Questionnaire.prototype.theQuestion.text = Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].question.text;
 	for (var x = 0; x<Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices.length; x++){
-		Questionnaire.prototype.theChoices[x].text = Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[x].text;
+		Questionnaire.prototype.theChoices[x].text = GLOBAL.CONVERT(Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[x].text);
 		Questionnaire.prototype.theChoices[x].color = (Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[x].stateStr==='CORRECT')?'pink':'black';
 	}
 	Questionnaire.prototype.quizTracker++;

@@ -1,19 +1,28 @@
 /**
  * common WebViewerWindow
  */
-function WebViewerWindow(loading) {
+function WebViewerWindow(GLOBAL,loading) {
 	var self = Ti.UI.createWindow({
+		exitOnClose:false,
 		title:'WEB検索',
-		backgroundImage:BG_PATH
-	});
-	self.addEventListener('postlayout',function(e){
-		loading.hideLoading();
+		backgroundImage:GLOBAL.BG_PATH
 	});
 	
+	
 	var webViewer = Ti.UI.createWebView({
-		url:COMPANY_URL
+		url:GLOBAL.COMPANY_URL
 	});
 	self.add(webViewer);
+	
+	if(GLOBAL.IS_ANDROID){
+		webViewer.addEventListener('load',function(e){
+			loading.hideLoading();
+		});
+	}else{
+		self.addEventListener('postlayout',function(e){
+			loading.hideLoading();
+		});
+	}
 	
 	return self;
 }

@@ -2,11 +2,11 @@
  * QuestionSet generator from tables CONTENTS & CONTENTS_META
  */
 
-function QuestionSet(start,end) {
+function QuestionSet(GLOBAL,start,end) {
 	var questionSetObjArr = [];
 	
 	try{
-		var db = Ti.Database.install('eiyoushi.sqlite', DB_NAME);
+		var db = Ti.Database.install('eiyoushi.sqlite', GLOBAL.DB_NAME);
 	}catch(e){
 		alert('cannot install database');
 	}

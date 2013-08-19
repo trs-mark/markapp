@@ -3,7 +3,7 @@
  * @param {Ti.UI.View} listView the view to attach the list
  * @param {JSON} questionnaireObj the JSON reference for the list to generate
  */
-function Reviewer(listView, questionnaireObj, userAnswers){
+function Reviewer(GLOBAL,listView, questionnaireObj, userAnswers){
 	for (var x=0; x<questionnaireObj.length; x++){
 		var newRow = Ti.UI.createView({
 			top:'10dp',
@@ -47,7 +47,7 @@ function Reviewer(listView, questionnaireObj, userAnswers){
 				color:'black'
 			});
 			var lblText = Ti.UI.createLabel({
-				text: convert(questionnaireObj[x].choices[a].text),
+				text: GLOBAL.CONVERT(questionnaireObj[x].choices[a].text),
 				font: {fontSize:'15dp'},
 				left:'5dp',
 				right:'5dp',
@@ -56,11 +56,11 @@ function Reviewer(listView, questionnaireObj, userAnswers){
 			
 			//if user selected this choice
 			if(userAnswers[x] == a){
-				lblNumber.backgroundImage = (questionnaireObj[x].choices[a].stateStr === 'CORRECT')?IMG_PATH + 'small_s.png':IMG_PATH + 'small_x.png';
+				lblNumber.backgroundImage = (questionnaireObj[x].choices[a].stateStr === 'CORRECT')?GLOBAL.IMG_PATH + 'small_s.png':GLOBAL.IMG_PATH + 'small_x.png';
 			}
 			//regardless of correct answer by user, show correct answer
 			if(questionnaireObj[x].choices[a].stateStr === 'CORRECT'){
-				lblNumber.backgroundImage = IMG_PATH + 'small_s.png';
+				lblNumber.backgroundImage = GLOBAL.IMG_PATH + 'small_s.png';
 			}
 			newRow.add(lblNumber);
 			newRow.add(lblText);

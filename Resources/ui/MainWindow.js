@@ -1,7 +1,7 @@
 /**
  * Main Window for iphone
  */
-function MainWindow() {
+function MainWindow(GLOBAL) {
 	//root Window
 	var containerWindow = Ti.UI.createWindow();
 	
@@ -9,13 +9,13 @@ function MainWindow() {
 		title: 'info'
 	});
 	
-	btnInfo.addEventListener('click',function(e){
+	var infoAction = function(events){
 		//Ti.Platform.openURL(COMPANY_URL);
 		var verAlertDialog = Titanium.UI.createAlertDialog({
-			message: APP_NAME + "\n" + APP_TEXT + "\n" +
-				"version" + VERSION + "\n" +
-				COPYRIGHT + "\n" +
-				COMPANY + "\n",
+			message: GLOBAL.APP_NAME + "\n" + GLOBAL.APP_TEXT + "\n" +
+				"version" + GLOBAL.VERSION + "\n" +
+				GLOBAL.COPYRIGHT + "\n" +
+				GLOBAL.COMPANY + "\n",
 			buttonNames: ['開発者を表示','閉じる'], 
 			cancel: 1,
 		});
@@ -23,12 +23,14 @@ function MainWindow() {
 			if(event.index == 0){
 				loading.showLoading(containerWindow,'Loading...',0.5);
 				WebViewerWindow = require('ui/WebViewerWindow');
-				var webViewerWindow = new WebViewerWindow(loading);
-				iphoneNav.open(webViewerWindow,{animated:true});
+				var webViewerWindow = new WebViewerWindow(GLOBAL,loading);
+				navi.open(webViewerWindow,{animated:true});
 			}
 		});
 		verAlertDialog.show();
-	});
+	};
+	
+	btnInfo.addEventListener('click',infoAction);
 	//base Window
 	var baseWindow = Ti.UI.createWindow({
 		backgroundColor: '#eeebdf',
@@ -37,8 +39,37 @@ function MainWindow() {
 		title: 'トップメニュー MKI',
 		orientation: Ti.UI.PORTRAIT,
 		rightNavButton: btnInfo,
-		backgroundImage: BG_PATH
+		backgroundImage: GLOBAL.BG_PATH
 	});
+	
+	if(GLOBAL.IS_ANDROID){
+		baseWindow.addEventListener('android:back',function(e){
+			//alert('main back');
+			if (navi.close()){
+				var alertDialog = Titanium.UI.createAlertDialog({
+					message: 'アプリを終了します。',
+					buttonNames: ['OK','キャンセル'],
+				});
+				alertDialog.show();
+				alertDialog.addEventListener('click', function(e){
+					if(e.index==0){
+						var activity = Titanium.Android.currentActivity; 
+						activity.finish();
+					}
+				});
+			}
+		});
+		var activity = baseWindow.activity;
+		
+		activity.onCreateOptionsMenu = function(e){
+			var menu = e.menu;
+			var menuItem = menu.add({ 
+				title: "Info", 
+				//icon:  "item1.png"
+			});
+			menuItem.addEventListener("click", infoAction);
+		};
+	}
 	
 	var containerView = Ti.UI.createView({
 		width:'320dp',
@@ -49,7 +80,7 @@ function MainWindow() {
 	// create top menu image
 	//トップメニューイメージを作成
 	var imgTop = Titanium.UI.createImageView({
-		image:IMG_PATH + 'top_image.png',
+		image:GLOBAL.IMG_PATH + 'top_image.png',
 		top:'5dp',
 		width:'304dp',
 		height:'249dp'
@@ -70,7 +101,7 @@ function MainWindow() {
 	
 	// create quiz button - ボタンをクイズ作成
 	var btnQuiz = Titanium.UI.createButton({
-		backgroundImage: IMG_PATH + 'top_btn_quiz_long.png',
+		backgroundImage: GLOBAL.IMG_PATH + 'top_btn_quiz_long.png',
 		top:'255dp',
 		width:'246dp',
 		height:'79dp'
@@ -78,13 +109,13 @@ function MainWindow() {
 	btnQuiz.addEventListener('click',function(e){
 		loading.showLoading(containerWindow,'Loading...',0.5);
 		var QuizListWindow = require('ui/QuizListWindow');
-		var quizListWindow = new QuizListWindow(iphoneNav,loading);
-		iphoneNav.open(quizListWindow,{animated:true});
+		var quizListWindow = new QuizListWindow(GLOBAL,navi,loading);
+		navi.open(quizListWindow,{animated:true});
 	});
 	
 	// create history button
 	var btnHistory = Titanium.UI.createButton({
-		backgroundImage: IMG_PATH + 'top_btn_history_long.png',
+		backgroundImage: GLOBAL.IMG_PATH + 'top_btn_history_long.png',
 		top:'330dp',
 		width:'246dp',
 		height:'79dp'
@@ -92,8 +123,8 @@ function MainWindow() {
 	btnHistory.addEventListener('click',function(e){
 		loading.showLoading(containerWindow,'Loading...',0.5);
 		var HistoryWindow = require('ui/HistoryWindow');
-		var historyWindow = new HistoryWindow(iphoneNav,loading);
-		iphoneNav.open(historyWindow,{animated:true});
+		var historyWindow = new HistoryWindow(GLOBAL,navi,loading);
+		navi.open(historyWindow,{animated:true});
 	});
 	
 	containerView.add(imgTop);
@@ -102,14 +133,16 @@ function MainWindow() {
 	containerView.add(btnHistory);
 	baseWindow.add(containerView);
 	
+	var Navigator = require('controllers/Navigator');
+	var navi = new Navigator(GLOBAL,baseWindow);
 	
-	//creates navigation bar
-	var iphoneNav = Titanium.UI.iPhone.createNavigationGroup({
-		window: baseWindow
-	});
+	if(GLOBAL.IS_ANDROID){
+		return baseWindow;
+	}else{
+		containerWindow.add(navi);
 	
-	containerWindow.add(iphoneNav);
+		return containerWindow;
+	}
 	
-	return containerWindow;
 }
 module.exports = MainWindow;

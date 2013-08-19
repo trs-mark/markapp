@@ -1,9 +1,10 @@
 /**
  * HistoryWindow for iPhone
  */
-function HistoryWindow(iphoneNav,loading) {
+function HistoryWindow(GLOBAL,iphoneNav,loading) {
 	var self = Ti.UI.createWindow({
-		backgroundImage:BG_PATH,
+		exitOnClose:false,
+		backgroundImage:GLOBAL.BG_PATH,
 		title:'履歴一覧'
 	});
 	self.addEventListener('postlayout',function(e){
@@ -12,7 +13,7 @@ function HistoryWindow(iphoneNav,loading) {
 	
 	var QuizHistory = require('models/QuizHistory');
 	var quizHistory = new QuizHistory();
-	var history = quizHistory.getQuizHistory();
+	var history = quizHistory.getQuizHistory(GLOBAL);
 	Ti.API.info(history);
 	
 	var rowData = [];
@@ -36,7 +37,7 @@ function HistoryWindow(iphoneNav,loading) {
 			touchEnabled: false
 		}));
 		row.add(Ti.UI.createImageView({
-			image:IMG_PATH + 'arrow.png',
+			image:GLOBAL.IMG_PATH + 'arrow.png',
 			right:0, bottom: 0,
 			width:20, height: 20,
 			touchEnabled: false
@@ -46,7 +47,7 @@ function HistoryWindow(iphoneNav,loading) {
 			var x = e.source.customId;
 			var HistoryViewerWindow = require('ui/HistoryViewerWindow');
 			Ti.API.info(JSON.stringify(history[x].dataObj));
-			var historyViewerWindow = new HistoryViewerWindow(history[x].chapterTitle,history[x].dataObj,loading);
+			var historyViewerWindow = new HistoryViewerWindow(GLOBAL,history[x].chapterTitle,history[x].dataObj,loading);
 			iphoneNav.open(historyViewerWindow,{animated:true});
 		});
 		

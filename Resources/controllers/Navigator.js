@@ -1,0 +1,64 @@
+/**
+ * Window Navigation Controller
+ */
+
+function Navigator(GLOBAL,baseWindow) {
+	var navi = {};
+	if (GLOBAL.IS_ANDROID){
+		//custom navigation controller for android
+		var opening = function(win,animation){
+			navi.stack.push(win);
+			win.open();
+		};
+		var closing = function(win,animation){
+			if(win){
+				win.close();
+			}else{
+				if(navi.stack.length > 0){
+					//if current window is quiz, do not let close immediately
+					if(navi.isQuiz){
+						var confirm = Titanium.UI.createAlertDialog({ 
+							message: '学習を終了しますか？',
+							buttonNames: ['OK','キャンセル'],
+							cancel: 1 
+						});
+						confirm.addEventListener('click',function(event){
+							var lastWin = navi.stack.pop();
+							lastWin.close();
+							navi.isQuiz = false;
+						});
+						confirm.show();
+					}else{
+						//double pop if it is result page
+						if (navi.isResult){
+							var resultWin = navi.stack.pop();
+							var quizWin = navi.stack.pop();
+							quizWin.close();
+							resultWin.close();
+							navi.isResult = false;
+						}else{//normal window closing
+							var lastWin = navi.stack.pop();
+							lastWin.close();
+						}
+					}
+				}else{
+					return true;
+				}
+			}
+		};
+		navi = {
+			stack: [],
+			isResult: false,
+			isQuiz: false,
+			open : opening,
+			close : closing
+		};
+	}else{
+		navi = Titanium.UI.iPhone.createNavigationGroup({
+			window: baseWindow
+		});
+	}
+	return navi;
+}
+
+module.exports = Navigator;

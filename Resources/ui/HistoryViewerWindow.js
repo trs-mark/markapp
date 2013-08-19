@@ -1,27 +1,31 @@
 /**
  * common HistoryViewerWindow single quiz viewer
  */
-function HistoryViewerWindow(chapterTitle,dataObj,loading) {
+function HistoryViewerWindow(GLOBAL,chapterTitle,dataObj,loading) {
 	var self = Ti.UI.createWindow({
+		exitOnClose:false,
 		title:chapterTitle,
-		backgroundImage:IMG_PATH + 'quiz_history_detail_bg.png'
+		backgroundImage:GLOBAL.IMG_PATH + 'quiz_history_detail_bg.png'
 	});
+	if(GLOBAL.IS_ANDROID){
+		self.addEventListener('android:back',function(e){
+			self.close();
+		});
+	}
 	self.addEventListener('postlayout',function(e){
-		setTimeout(function(e){
-			loading.hideLoading();
-		},1000);
+		loading.hideLoading();
 	});
 	
 	// create try again button
 	var btnRetry = Titanium.UI.createButton({
-		backgroundImage:IMG_PATH + 'result_btn_tryagain.png',
+		backgroundImage:GLOBAL.IMG_PATH + 'result_btn_tryagain.png',
 		top:0,
 		left:'30dp',
 		right:'30dp',
 		height:'20%'
 	});
-	if (IS_ANDROID) {
-		btnRetry.backgroundSelectedImage = getImagesPath('result_btn_tryagain.png');
+	if (GLOBAL.IS_ANDROID) {
+		btnRetry.backgroundSelectedImage = GLOBAL.IMG_PATH + 'result_btn_tryagain.png';
 	}
 	self.add(btnRetry);
 	
@@ -37,11 +41,11 @@ function HistoryViewerWindow(chapterTitle,dataObj,loading) {
 	});
 	
 	var QuestionSet = require('models/QuestionSet');
-	var questionnaireObjArr = new QuestionSet(dataObj.start,dataObj.end);
+	var questionnaireObjArr = new QuestionSet(GLOBAL,dataObj.start,dataObj.end);
 	
 	var Reviewer = require('controllers/Reviewer');
 	Ti.API.info(dataObj.answers);
-	var reviewr = new Reviewer(historyView,questionnaireObjArr,dataObj.answers);
+	var reviewr = new Reviewer(GLOBAL,historyView,questionnaireObjArr,dataObj.answers);
 	
 	self.add(historyView);
 	

@@ -1,7 +1,7 @@
 /**
  * QuizWindow for iPhone
  */
-function QuizWindow(iphoneNav,windowTitle,start,end,loading) {
+function QuizWindow(GLOBAL,iphoneNav,windowTitle,start,end,loading) {
 	var btnBack = Ti.UI.createButton({
 		title:'back'
 	});
@@ -16,14 +16,20 @@ function QuizWindow(iphoneNav,windowTitle,start,end,loading) {
 				iphoneNav.close(self,{animated:true}); 
 			}
 		});
-		confirm.show();	
+		confirm.show();
 	});
 	
 	var self = Ti.UI.createWindow({
+		exitOnClose:false,
 		title:windowTitle,
-		backgroundImage:(DEVICE_HEIGHT>=568)?IMG_PATH + 'chapter_quiz_bg_2_i5.png':IMG_PATH + 'chapter_quiz_bg_2.png',
+		backgroundImage:(GLOBAL.DEVICE_HEIGHT>=568)?GLOBAL.IMG_PATH + 'chapter_quiz_bg_2_i5.png':GLOBAL.IMG_PATH + 'chapter_quiz_bg_2.png',
 		leftNavButton: btnBack
 	});
+	if(GLOBAL.IS_ANDROID){
+		self.addEventListener('android:back',function(e){
+			self.close();
+		});
+	}
 	self.addEventListener('postlayout',function(e){
 		loading.hideLoading();
 	});
@@ -47,9 +53,9 @@ function QuizWindow(iphoneNav,windowTitle,start,end,loading) {
 	};
 	*/
 	var QuestionSet = require('models/QuestionSet');
-	var questionnaireObjArr = new QuestionSet(start,end);
+	var questionnaireObjArr = new QuestionSet(GLOBAL,start,end);
 	
-	var quizView = questionnaire.getQuizView(iphoneNav,windowTitle,start,end,self,questionnaireObjArr,loading);
+	var quizView = questionnaire.getQuizView(GLOBAL,iphoneNav,windowTitle,start,end,self,questionnaireObjArr,loading);
 	
 	//add buttons
 	var btnLefts = [0,'20%','40%','60%','80%'];
@@ -60,11 +66,11 @@ function QuizWindow(iphoneNav,windowTitle,start,end,loading) {
 			left: btnLefts[i],
 			height:'60dp',
 			width:'20%',
-			bottom:(IS_ANDROID)?'2dp':'5dp',
-			backgroundImage:IMG_PATH + (i+1) + '_b.png'
+			bottom:(GLOBAL.IS_ANDROID)?'2dp':'5dp',
+			backgroundImage:GLOBAL.IMG_PATH + (i+1) + '_b.png'
 		});
 		btnChoice.addEventListener('click',function(e){
-			Ti.API.info(questionnaire.evaluateAnswer(e.source.customButtonId));
+			Ti.API.info(questionnaire.evaluateAnswer(GLOBAL,e.source.customButtonId));
 		});
 		self.add(btnChoice);
 	}

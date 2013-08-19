@@ -1,12 +1,13 @@
 /**
  * QuizListWindow for iPhone
  */
-function QuizListWindow(iphoneNav,loading) {
+function QuizListWindow(GLOBAL,navi,loading) {
 	var title= ['生化学過去問 1-20','生化学過去問 21-40','生化学過去問 41-60','生化学過去問 61-80','生化学過去問 81-100','生化学過去問 101-120','生化学過去問 121-140','生化学過去問 141-161','生化学過去問 1-5'];
 	var range= [{start:1,end:20},{start:21,end:40},{start:41,end:60},{start:61,end:80},{start:81,end:100},{start:101,end:120},{start:121,end:140},{start:141,end:161},{start:1,end:5}];
 	var self = Ti.UI.createWindow({
+		exitOnClose:false,
 		title:'問題の選択',
-		backgroundImage:BG_PATH
+		backgroundImage:GLOBAL.BG_PATH
 	});
 	self.addEventListener('postlayout',function(e){
 		loading.hideLoading();
@@ -33,7 +34,7 @@ function QuizListWindow(iphoneNav,loading) {
 			touchEnabled: false
 		}));
 		row.add(Ti.UI.createImageView({
-			image:IMG_PATH + 'arrow.png',
+			image:GLOBAL.IMG_PATH + 'arrow.png',
 			right:0, bottom: 0,
 			width:20, height: 20,
 			touchEnabled: false
@@ -41,8 +42,11 @@ function QuizListWindow(iphoneNav,loading) {
 		row.addEventListener('click', function(e){
 			loading.showLoading(self,'Loading...',1.0);
 			var QuizWindow = require('ui/QuizWindow');
-			var quizWindow = new QuizWindow(iphoneNav,e.source.children[0].text,e.source.customRange.start,e.source.customRange.end,loading);
-			iphoneNav.open(quizWindow,{animated:true});
+			var quizWindow = new QuizWindow(GLOBAL,navi,e.source.children[0].text,e.source.customRange.start,e.source.customRange.end,loading);
+			if(GLOBAL.IS_ANDROID){
+				navi.isQuiz = true;
+			}
+			navi.open(quizWindow,{animated:true});
 		});
 		
 		rowData.push(row);
