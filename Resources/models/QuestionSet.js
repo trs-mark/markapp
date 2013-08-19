@@ -11,6 +11,23 @@ function QuestionSet(GLOBAL,start,end) {
 		alert('cannot install database');
 	}
 	
+	var shuffle = function(arr){
+		var currentIndex = arr.length, temporaryValue, randomIndex;
+		
+		// While there remain elements to shuffle...
+		while (0 !== currentIndex) {
+			// Pick a remaining element...
+			randomIndex = Math.floor(Math.random() * currentIndex);
+			Ti.API.info('randomIndex:'+randomIndex);
+			currentIndex -= 1;
+			
+			// And swap it with the current element.
+			temporaryValue = arr[currentIndex];
+			arr[currentIndex] = arr[randomIndex];
+			arr[randomIndex] = temporaryValue;
+		}
+		return arr;
+	};
 	try{
 		//var sql = 'select c.id, c.name, m.meta_id, m.content_id, m.meta_key, m.meta_value, m.quiz_choice from contents as c, contents_meta as m where c.id=m.content_id and c.id between ? and ? order by c.id';
 		var sql = 'select c.id, c.name, m.meta_id, m.content_id, m.meta_key, m.meta_value, m.quiz_choice from contents as c, contents_meta as m where c.id=m.content_id and c.id between ? and ?';
@@ -40,11 +57,13 @@ function QuestionSet(GLOBAL,start,end) {
 		var choicePerQuestion = 5;
 		var questionIteration = 0;
 		for (var b=0;b<choicesObjArr.length;b=b+choicePerQuestion){
+			var choicesInOrder = [choicesObjArr[b],choicesObjArr[b+1],
+					choicesObjArr[b+2],choicesObjArr[b+3],choicesObjArr[b+4]
+				];
+			var choicesRandom = shuffle(choicesInOrder);
 			questionSetObjArr.push({
 				question: questionObjArr[questionIteration],
-				choices: [choicesObjArr[b],choicesObjArr[b+1],
-					choicesObjArr[b+2],choicesObjArr[b+3],choicesObjArr[b+4]
-				]
+				choices: choicesRandom
 			});
 			questionIteration++;
 		}

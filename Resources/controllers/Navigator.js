@@ -10,11 +10,33 @@ function Navigator(GLOBAL,baseWindow) {
 			navi.stack.push(win);
 			win.open();
 		};
+		var retryOpening = function(win,animation){
+			if(navi.stack.length > 0){
+				var resultWin = navi.stack.pop();
+				var quizWin = navi.stack.pop();
+				navi.isResult = false;
+			}
+			navi.stack.push(win);
+			win.open();
+			if(quizWin){
+				quizWin.close();
+			}
+			if(resultWin){
+				resultWin.close();
+			}
+		};
 		var closing = function(win,animation){
 			if(win){
 				win.close();
 			}else{
 				if(navi.stack.length > 0){
+					if(navi.isInfo){
+						//if info webview current window just normal close
+						var lastWin = navi.stack.pop();
+						lastWin.close();
+						navi.isInfo = false;
+						return false;
+					}
 					//if current window is quiz, do not let close immediately
 					if(navi.isQuiz){
 						var confirm = Titanium.UI.createAlertDialog({ 
@@ -50,7 +72,9 @@ function Navigator(GLOBAL,baseWindow) {
 			stack: [],
 			isResult: false,
 			isQuiz: false,
+			isInfo: false,
 			open : opening,
+			retryOpen: retryOpening,
 			close : closing
 		};
 	}else{

@@ -24,6 +24,9 @@ function MainWindow(GLOBAL) {
 				loading.showLoading(containerWindow,'Loading...',0.5);
 				WebViewerWindow = require('ui/WebViewerWindow');
 				var webViewerWindow = new WebViewerWindow(GLOBAL,loading);
+				if(GLOBAL.IS_ANDROID){
+					navi.isInfo = true;
+				}
 				navi.open(webViewerWindow,{animated:true});
 			}
 		});
@@ -127,6 +130,10 @@ function MainWindow(GLOBAL) {
 		navi.open(historyWindow,{animated:true});
 	});
 	
+	if(GLOBAL.IS_ANDROID){
+		btnQuiz.backgroundSelectedImage = GLOBAL.IMG_PATH + 'top_btn_quiz_long_selected.png';
+		btnHistory.backgroundSelectedImage = GLOBAL.IMG_PATH + 'top_btn_history_long_selected.png';
+	}
 	containerView.add(imgTop);
 	containerView.add(lblTop);
 	containerView.add(btnQuiz);

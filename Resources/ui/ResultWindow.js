@@ -1,13 +1,13 @@
 /**
  * ResultWindow for iPhone
  */
-function ResultWindow(GLOBAL,iphoneNav,quizWindow,chapterTitle,userAnswers,correctCount,start,end,questionnaireObj,loading) {
+function ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,userAnswers,correctCount,start,end,questionnaireObj,willSave,loading) {
 	var btnBack = Ti.UI.createButton({
 		title:'戻る'
 	});
 	btnBack.addEventListener('click',function(e){
-		iphoneNav.close(quizWindow,{animated:'true'});
-		iphoneNav.close(self,{animated:'true'});
+		navi.close(quizWindow,{animated:'true'});
+		navi.close(self,{animated:'true'});
 	});
 	
 	var self = Ti.UI.createWindow({
@@ -49,16 +49,12 @@ function ResultWindow(GLOBAL,iphoneNav,quizWindow,chapterTitle,userAnswers,corre
 	});
 	infoView.add(lblDate);
 	
-	// insert history db
-	//if (!winParamObj.quiz_obj.retryFlg) {
-		//var QuizHistory = require('common/QuizHistory');
-		//var QuizHistoryModel = new QuizHistory();/
-		//winParamObj.quiz_obj.datetime = mydate.year + '-' + mydate.month + '-' + mydate.day + ' ' + mydate.hour + ':' + mydate.min + ':' + mydate.sec;
-		//QuizHistoryModel.saveQuizHistory(winParamObj.quiz_obj,Titanium.App.Properties.getString('ChapterTitle'));
-	//}
-	var QuizHistory = require('models/QuizHistory');
-	var quizHistory = new QuizHistory();
-	quizHistory.addQuizHistory(GLOBAL,chapterTitle,start,end,userAnswers,correctCount,mydate);
+	//save to database user experience
+	if(willSave){
+		var QuizHistory = require('models/QuizHistory');
+		var quizHistory = new QuizHistory();
+		quizHistory.addQuizHistory(GLOBAL,chapterTitle,start,questionnaireObj,end,userAnswers,correctCount,mydate);
+	}
 	
 	var lblChapterTitle = Titanium.UI.createLabel({
 		color:'#3F0000',
@@ -102,7 +98,24 @@ function ResultWindow(GLOBAL,iphoneNav,quizWindow,chapterTitle,userAnswers,corre
 		btnRetry.backgroundSelectedImage = GLOBAL.IMG_PATH + 'result_btn_tryagain_selected.png';
 		btnRetry.top = '235dp';
 	}
-	infoView.add(btnRetry);
+	//add retry button if not perfect
+	if(correctCount != userAnswers.length){
+		btnRetry.addEventListener('click',function(e){
+			loading.showLoading(self,'Loading...',1.0);
+			var QuizWindow = require('ui/QuizWindow');
+			var willSave = false;
+			var retryQuizWindow = new QuizWindow(GLOBAL,navi,chapterTitle,start,end,willSave,loading);
+			if(GLOBAL.IS_ANDROID){
+				navi.isQuiz = true;
+				navi.retryOpen(retryQuizWindow,{animated:true});
+			}else{
+				navi.close(quizWindow,{animated:true});
+				navi.close(self,{animated:true});
+				navi.open(retryQuizWindow,{animated:true});
+			}
+		});
+		infoView.add(btnRetry);
+	}
 	
 	resultScrollView.add(infoView);
 	

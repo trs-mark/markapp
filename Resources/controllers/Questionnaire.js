@@ -3,12 +3,19 @@
  */
 
 function Questionnaire() {
+	//the current question number
 	Questionnaire.prototype.theQuestionNumber = null;
+	//the current question
 	Questionnaire.prototype.theQuestion = null;
+	//array of current choices for the current question
 	Questionnaire.prototype.theChoices = [];
+	//quizTracker - tracks the current question count
 	Questionnaire.prototype.quizTracker = 0;
+	//quizBreadCrumps - tracks the current answer count
 	Questionnaire.prototype.quizBreadCrumps = 0;
+	//correctCount - tracks the number of correct answers
 	Questionnaire.prototype.correctCount = 0;
+	//userAnswers - stores the user's choice
 	Questionnaire.prototype.userAnswers = [];
 }
 
@@ -16,7 +23,7 @@ function Questionnaire() {
  * returns the contents of the questionnaire
  * @return {Ti.UI.ScrollView} quizView the questionnaire
  */
-Questionnaire.prototype.getQuizView = function(GLOBAL,iphoneNav,chapterTitle,start,end,quizWindow,questionnaireObj,loading){
+Questionnaire.prototype.getQuizView = function(GLOBAL,navi,chapterTitle,start,end,quizWindow,questionnaireObj,willSave,loading){
 	Ti.API.info(JSON.stringify(questionnaireObj));
 	Questionnaire.prototype.quizView = Ti.UI.createScrollView({
 		top: '12dp',
@@ -30,16 +37,18 @@ Questionnaire.prototype.getQuizView = function(GLOBAL,iphoneNav,chapterTitle,sta
 		var direction = (e.direction=='left')?'left':'right';
 		//alert('you swung ' + direction);
 		if (direction == 'left'){
-			if(Questionnaire.prototype.quizTracker >= Questionnaire.prototype.questionnaireObj.length){
+			Ti.API.info('crums:' +Questionnaire.prototype.quizBreadCrumps);
+			Ti.API.info('quiz tracker:' + Questionnaire.prototype.quizTracker);
+			if(Questionnaire.prototype.quizBreadCrumps >= Questionnaire.prototype.questionnaireObj.length){
 				//go to result
 				loading.showLoading(quizWindow,'Loading...',1.0);
 				var ResultWindow = require('ui/ResultWindow');
-				var resultWindow = new ResultWindow(GLOBAL,iphoneNav,quizWindow,chapterTitle,Questionnaire.prototype.userAnswers,Questionnaire.prototype.correctCount,start,end,Questionnaire.prototype.questionnaireObj,loading);
+				var resultWindow = new ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,Questionnaire.prototype.userAnswers,Questionnaire.prototype.correctCount,start,end,Questionnaire.prototype.questionnaireObj,willSave,loading);
 				if(GLOBAL.IS_ANDROID){
-					iphoneNav.isResult = true;
-					iphoneNav.isQuiz = false;
+					navi.isResult = true;
+					navi.isQuiz = false;
 				}
-				iphoneNav.open(resultWindow,{animated:true});
+				navi.open(resultWindow,{animated:true});
 			}else{
 				if (Questionnaire.prototype.quizBreadCrumps == Questionnaire.prototype.quizTracker){
 					//next question

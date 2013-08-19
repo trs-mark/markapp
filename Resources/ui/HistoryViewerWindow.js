@@ -1,7 +1,7 @@
 /**
  * common HistoryViewerWindow single quiz viewer
  */
-function HistoryViewerWindow(GLOBAL,chapterTitle,dataObj,loading) {
+function HistoryViewerWindow(GLOBAL,navi,chapterTitle,dataObj,showRetry,loading) {
 	var self = Ti.UI.createWindow({
 		exitOnClose:false,
 		title:chapterTitle,
@@ -25,9 +25,9 @@ function HistoryViewerWindow(GLOBAL,chapterTitle,dataObj,loading) {
 		height:'20%'
 	});
 	if (GLOBAL.IS_ANDROID) {
-		btnRetry.backgroundSelectedImage = GLOBAL.IMG_PATH + 'result_btn_tryagain.png';
+		btnRetry.backgroundSelectedImage = GLOBAL.IMG_PATH + 'result_btn_tryagain_selected.png';
 	}
-	self.add(btnRetry);
+	
 	
 	//  display quiz history details
 	var historyView = Ti.UI.createScrollView({
@@ -40,13 +40,30 @@ function HistoryViewerWindow(GLOBAL,chapterTitle,dataObj,loading) {
 		layout:'vertical'
 	});
 	
-	var QuestionSet = require('models/QuestionSet');
-	var questionnaireObjArr = new QuestionSet(GLOBAL,dataObj.start,dataObj.end);
+	//var QuestionSet = require('models/QuestionSet');
+	//var questionnaireObjArr = new QuestionSet(GLOBAL,dataObj.start,dataObj.end);
 	
 	var Reviewer = require('controllers/Reviewer');
 	Ti.API.info(dataObj.answers);
-	var reviewr = new Reviewer(GLOBAL,historyView,questionnaireObjArr,dataObj.answers);
+	var reviewr = new Reviewer(GLOBAL,historyView,dataObj.questionnaireObjArr,dataObj.answers);
 	
+	//add retry button if not perfect
+	if(showRetry){
+		btnRetry.addEventListener('click',function(e){
+			loading.showLoading(self,'Loading...',1.0);
+			var QuizWindow = require('ui/QuizWindow');
+			var willSave = false;
+			var quizWindow = new QuizWindow(GLOBAL,navi,chapterTitle,dataObj.start,dataObj.end,willSave,loading);
+			if(GLOBAL.IS_ANDROID){
+				navi.isQuiz = true;
+			}
+			navi.open(quizWindow,{animated:true});
+		});
+		self.add(btnRetry);
+	}else{
+		historyView.top = historyView.bottom;
+		self.backgroundImage=GLOBAL.IMG_PATH + 'memo_bg.png';
+	}
 	self.add(historyView);
 	
 	return self;

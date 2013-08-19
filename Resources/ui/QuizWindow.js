@@ -1,9 +1,9 @@
 /**
  * QuizWindow for iPhone
  */
-function QuizWindow(GLOBAL,iphoneNav,windowTitle,start,end,loading) {
+function QuizWindow(GLOBAL,navi,windowTitle,start,end,willSave,loading) {
 	var btnBack = Ti.UI.createButton({
-		title:'back'
+		title:'戻る'
 	});
 	btnBack.addEventListener('click',function(e){
 		var confirm = Titanium.UI.createAlertDialog({ 
@@ -13,7 +13,7 @@ function QuizWindow(GLOBAL,iphoneNav,windowTitle,start,end,loading) {
 		});
 		confirm.addEventListener('click',function(event){
 			if(event.index == 0){ 
-				iphoneNav.close(self,{animated:true}); 
+				navi.close(self,{animated:true}); 
 			}
 		});
 		confirm.show();
@@ -55,7 +55,7 @@ function QuizWindow(GLOBAL,iphoneNav,windowTitle,start,end,loading) {
 	var QuestionSet = require('models/QuestionSet');
 	var questionnaireObjArr = new QuestionSet(GLOBAL,start,end);
 	
-	var quizView = questionnaire.getQuizView(GLOBAL,iphoneNav,windowTitle,start,end,self,questionnaireObjArr,loading);
+	var quizView = questionnaire.getQuizView(GLOBAL,navi,windowTitle,start,end,self,questionnaireObjArr,willSave,loading);
 	
 	//add buttons
 	var btnLefts = [0,'20%','40%','60%','80%'];

@@ -1,7 +1,7 @@
 /**
  * HistoryWindow for iPhone
  */
-function HistoryWindow(GLOBAL,iphoneNav,loading) {
+function HistoryWindow(GLOBAL,navi,loading) {
 	var self = Ti.UI.createWindow({
 		exitOnClose:false,
 		backgroundImage:GLOBAL.BG_PATH,
@@ -47,8 +47,9 @@ function HistoryWindow(GLOBAL,iphoneNav,loading) {
 			var x = e.source.customId;
 			var HistoryViewerWindow = require('ui/HistoryViewerWindow');
 			Ti.API.info(JSON.stringify(history[x].dataObj));
-			var historyViewerWindow = new HistoryViewerWindow(GLOBAL,history[x].chapterTitle,history[x].dataObj,loading);
-			iphoneNav.open(historyViewerWindow,{animated:true});
+			var showRetry = (history[x].questionCount == history[x].correctCount)?false:true;
+			var historyViewerWindow = new HistoryViewerWindow(GLOBAL,navi,history[x].chapterTitle,history[x].dataObj,showRetry,loading);
+			navi.open(historyViewerWindow,{animated:true});
 		});
 		
 		rowData.push(row);

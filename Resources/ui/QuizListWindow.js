@@ -42,7 +42,8 @@ function QuizListWindow(GLOBAL,navi,loading) {
 		row.addEventListener('click', function(e){
 			loading.showLoading(self,'Loading...',1.0);
 			var QuizWindow = require('ui/QuizWindow');
-			var quizWindow = new QuizWindow(GLOBAL,navi,e.source.children[0].text,e.source.customRange.start,e.source.customRange.end,loading);
+			var willSave = true;
+			var quizWindow = new QuizWindow(GLOBAL,navi,e.source.children[0].text,e.source.customRange.start,e.source.customRange.end,willSave,loading);
 			if(GLOBAL.IS_ANDROID){
 				navi.isQuiz = true;
 			}
