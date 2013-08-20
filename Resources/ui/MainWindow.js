@@ -100,7 +100,7 @@ function MainWindow(GLOBAL) {
 	});
 	
 	var ActivityIndicator = require('controllers/ActivityIndicator');
-	var loading = new ActivityIndicator();
+	var loading = new ActivityIndicator(containerWindow);
 	
 	// create quiz button - ボタンをクイズ作成
 	var btnQuiz = Titanium.UI.createButton({

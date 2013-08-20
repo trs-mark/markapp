@@ -2,7 +2,8 @@
  * Activity Indicator
  */
 
-function ActivityIndicator() {
+function ActivityIndicator(win) {
+	ActivityIndicator.prototype.win = win;
 }
 
 //activitiy indicator reference
@@ -31,7 +32,8 @@ ActivityIndicator.prototype.createActInd = function(win, message, transparency){
 	});
 	if(ActivityIndicator.prototype.osname==='iphone' || ActivityIndicator.prototype.osname==='ipad'){
 		vCover.add(actInd);
-		win.add(vCover);
+		//win.add(vCover);
+		ActivityIndicator.prototype.win.add(vCover);
 	}
 	return [vCover,actInd];
 };
