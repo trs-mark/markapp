@@ -17,7 +17,7 @@ ActivityIndicator.prototype.osname = Ti.Platform.osname;
  * @param {String} message
  * @param {float} transparency
  */
-ActivityIndicator.prototype.createActInd = function(win, message, transparency){
+ActivityIndicator.prototype.createActInd = function(message, transparency, win){
 	var actInd = Ti.UI.createActivityIndicator({
 		style:Ti.UI.iPhone.ActivityIndicatorStyle.BIG,
 		height:'100dp',
@@ -32,8 +32,11 @@ ActivityIndicator.prototype.createActInd = function(win, message, transparency){
 	});
 	if(ActivityIndicator.prototype.osname==='iphone' || ActivityIndicator.prototype.osname==='ipad'){
 		vCover.add(actInd);
-		//win.add(vCover);
-		ActivityIndicator.prototype.win.add(vCover);
+		if(win){
+			win.add(vCover);
+		}else{
+			ActivityIndicator.prototype.win.add(vCover);
+		}
 	}
 	return [vCover,actInd];
 };
@@ -45,7 +48,20 @@ ActivityIndicator.prototype.createActInd = function(win, message, transparency){
  * @param {float} transparency
  */
 ActivityIndicator.prototype.showLoading = function(win, message,transparency){
-	ActivityIndicator.prototype.loading = ActivityIndicator.prototype.createActInd(win, message, transparency);
+	ActivityIndicator.prototype.loading = ActivityIndicator.prototype.createActInd(message, transparency, win);
+	if(ActivityIndicator.prototype.osname==='iphone' || ActivityIndicator.prototype.osname==='ipad'){
+		ActivityIndicator.prototype.loading[0].visible = true;
+	}
+	ActivityIndicator.prototype.loading[1].show();
+};
+
+/**
+ * Show activity indicator without window reference
+ * @param {String} message
+ * @param {float} transparency
+ */
+ActivityIndicator.prototype.showLoading2 = function(message,transparency){
+	ActivityIndicator.prototype.loading = ActivityIndicator.prototype.createActInd(message, transparency);
 	if(ActivityIndicator.prototype.osname==='iphone' || ActivityIndicator.prototype.osname==='ipad'){
 		ActivityIndicator.prototype.loading[0].visible = true;
 	}

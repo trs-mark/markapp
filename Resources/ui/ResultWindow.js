@@ -73,6 +73,8 @@ function ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,userAnswers,correctCou
 	
 	
 	var resultScrollView = Titanium.UI.createScrollView({
+		contentHeight:Ti.UI.SIZE,
+		contentWidth:Ti.UI.SIZE,
 		showVerticalScrollIndicator:true,
 		layout:'vertical'
 	});
@@ -186,7 +188,9 @@ function ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,userAnswers,correctCou
 		borderWidth:2
 	});
 	var Reviewer = require('controllers/Reviewer');
-	var reviewr = new Reviewer(GLOBAL,listView,questionnaireObj,userAnswers);
+	var reviewer = new Reviewer();
+	reviewer.setAsResult(GLOBAL,listView,questionnaireObj,userAnswers);
+	
 	resultScrollView.add(listView);
 	
 		selfView.add(resultScrollView);

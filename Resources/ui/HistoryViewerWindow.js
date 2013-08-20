@@ -11,6 +11,8 @@ function HistoryViewerWindow(GLOBAL,navi,chapterTitle,dataObj,showRetry,loading)
 		self.addEventListener('android:back',function(e){
 			self.close();
 		});
+	}else{
+		self.backgroundImage = GLOBAL.IMG_PATH + 'quiz_history_detail_bg.png';
 	}
 	self.addEventListener('postlayout',function(e){
 		loading.hideLoading();
@@ -31,6 +33,9 @@ function HistoryViewerWindow(GLOBAL,navi,chapterTitle,dataObj,showRetry,loading)
 	
 	//  display quiz history details
 	var historyView = Ti.UI.createScrollView({
+		showVerticalScrollIndicator:true,
+		contentHeight:Ti.UI.SIZE,
+		contentWidth:Ti.UI.SIZE,
 		backgroundColor:'transparent',
 		separatorColor: 'transparent',
 		top:'20%',
@@ -45,7 +50,8 @@ function HistoryViewerWindow(GLOBAL,navi,chapterTitle,dataObj,showRetry,loading)
 	
 	var Reviewer = require('controllers/Reviewer');
 	Ti.API.info(dataObj.answers);
-	var reviewr = new Reviewer(GLOBAL,historyView,dataObj.questionnaireObjArr,dataObj.answers);
+	var reviewer = new Reviewer();
+	reviewer.setAsResult(GLOBAL,historyView,dataObj.questionnaireObjArr,dataObj.answers);
 	
 	if(GLOBAL.IS_ANDROID){
 		var selfView = Ti.UI.createView({
@@ -77,7 +83,7 @@ function HistoryViewerWindow(GLOBAL,navi,chapterTitle,dataObj,showRetry,loading)
 	//add retry button if not perfect
 	if(showRetry){
 		btnRetry.addEventListener('click',function(e){
-			loading.showLoading(self,'Loading...',1.0);
+			loading.showLoading2('Loading...',1.0);
 			var QuizWindow = require('ui/QuizWindow');
 			var willSave = false;
 			var quizWindow = new QuizWindow(GLOBAL,navi,chapterTitle,dataObj.start,dataObj.end,willSave,loading,dataObj.mistakesObjArr);

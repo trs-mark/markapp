@@ -43,7 +43,7 @@ function HistoryWindow(GLOBAL,navi,loading) {
 			touchEnabled: false
 		}));
 		row.addEventListener('click', function(e){
-			loading.showLoading(self,'Loading...',1.0);
+			loading.showLoading2('Loading...',1.0);
 			var x = e.source.customId;
 			var HistoryViewerWindow = require('ui/HistoryViewerWindow');
 			Ti.API.info(JSON.stringify(history[x].dataObj));

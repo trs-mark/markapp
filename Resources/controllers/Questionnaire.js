@@ -27,53 +27,63 @@ function Questionnaire() {
 Questionnaire.prototype.getQuizView = function(GLOBAL,navi,chapterTitle,start,end,quizWindow,questionnaireObj,willSave,btnobjct,loading){
 	Ti.API.info(JSON.stringify(questionnaireObj));
 	Questionnaire.prototype.quizView = Ti.UI.createScrollView({
+		showVerticalScrollIndicator:true,
+		contentHeight: Ti.UI.SIZE,
+		contentWidth: Ti.UI.SIZE,
 		top: '12dp',
 		left:'10dp',
 		right:'10dp',
 		bottom:'95dp',
-		layout:'vertical',
-		zIndex: 1
+		layout:'vertical'
 	});
+	var nextPage = function(){
+		Ti.API.info('crums:' +Questionnaire.prototype.quizBreadCrumps);
+		Ti.API.info('quiz tracker:' + Questionnaire.prototype.quizTracker);
+		if(Questionnaire.prototype.quizBreadCrumps >= Questionnaire.prototype.questionnaireObj.length){
+			//go to result
+			loading.showLoading(quizWindow,'Loading...',1.0);
+			var ResultWindow = require('ui/ResultWindow');
+			var resultWindow = new ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,
+				Questionnaire.prototype.userAnswers,
+				Questionnaire.prototype.correctCount,
+				start,end,
+				Questionnaire.prototype.questionnaireObj,
+				Questionnaire.prototype.mistakesObjArr,
+				willSave,loading);
+			if(GLOBAL.IS_ANDROID){
+				navi.isResult = true;
+				navi.isQuiz = false;
+				navi.open(resultWindow,{animated:true});
+			}else{
+				resultWindow.open();
+			}
+		}else{
+			if (Questionnaire.prototype.quizBreadCrumps == Questionnaire.prototype.quizTracker){
+				//next question
+				loading.showLoading(quizWindow,'Loading...',0.9);
+				Questionnaire.prototype.nextQuestionnaireItem(GLOBAL);
+				Questionnaire.prototype.swipe.setVisible(false);
+				Questionnaire.prototype.comment.setVisible(false);
+				Questionnaire.prototype.clickFlag=0;
+				for(var i=1;i<btnobjct.length;i++){
+					btnobjct[i].backgroundImage = GLOBAL.IMG_PATH + (i) + '_b.png';
+				}
+				loading.hideLoading();
+			}else{
+				Ti.API.info('not yet');
+			}
+		}
+	};
+	
+	Questionnaire.prototype.quizView.addEventListener('afterComment',function(e){
+		nextPage();
+	});
+	
 	Questionnaire.prototype.quizView.addEventListener('swipe',function(e){
 		var direction = (e.direction=='left')?'left':'right';
 		//alert('you swung ' + direction);
 		if (direction == 'left'){
-			Ti.API.info('crums:' +Questionnaire.prototype.quizBreadCrumps);
-			Ti.API.info('quiz tracker:' + Questionnaire.prototype.quizTracker);
-			if(Questionnaire.prototype.quizBreadCrumps >= Questionnaire.prototype.questionnaireObj.length){
-				//go to result
-				loading.showLoading(quizWindow,'Loading...',1.0);
-				var ResultWindow = require('ui/ResultWindow');
-				var resultWindow = new ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,
-					Questionnaire.prototype.userAnswers,
-					Questionnaire.prototype.correctCount,
-					start,end,
-					Questionnaire.prototype.questionnaireObj,
-					Questionnaire.prototype.mistakesObjArr,
-					willSave,loading);
-				if(GLOBAL.IS_ANDROID){
-					navi.isResult = true;
-					navi.isQuiz = false;
-					navi.open(resultWindow,{animated:true});
-				}else{
-					resultWindow.open();
-				}
-			}else{
-				if (Questionnaire.prototype.quizBreadCrumps == Questionnaire.prototype.quizTracker){
-					//next question
-					loading.showLoading(quizWindow,'Loading...',0.9);
-					Questionnaire.prototype.nextQuestionnaireItem(GLOBAL);
-					Questionnaire.prototype.swipe.setVisible(false);
-					Questionnaire.prototype.comment.setVisible(false);
-					Questionnaire.prototype.clickFlag=0;
-					for(var i=1;i<btnobjct.length;i++){
-						btnobjct[i].backgroundImage = GLOBAL.IMG_PATH + (i) + '_b.png';
-					}
-					loading.hideLoading();
-				}else{
-					Ti.API.info('not yet');
-				}
-			}
+			nextPage();
 		}
 	});
 	
@@ -83,7 +93,7 @@ Questionnaire.prototype.getQuizView = function(GLOBAL,navi,chapterTitle,start,en
 	
 	return Questionnaire.prototype.quizView;
 };
-Questionnaire.prototype.setSwipe = function(GLOBAL){
+Questionnaire.prototype.setSwipe = function(GLOBAL,navi,quizWindow,loading){
 	Questionnaire.prototype.swipe = Titanium.UI.createImageView({
 		image:GLOBAL.IMG_PATH +'swipe.png',
 		top:'142dp',
@@ -102,9 +112,25 @@ Questionnaire.prototype.setSwipe = function(GLOBAL){
 		height:'66.5dp',
 		zIndex: 3
 	});
+	if(GLOBAL.IS_ANDROID){
+		Questionnaire.prototype.comment.backgroundSelectedImage = GLOBAL.IMG_PATH +'commentary_new_selected.png';
+	}
 	
 	Questionnaire.prototype.comment.addEventListener('click',function(e){
-		alert(Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker-1].question.text);
+		//alert(Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker-1].question.text);
+		loading.showLoading(quizWindow,'Loading...',0.5);
+		var CommentaryWindow = require('ui/CommentaryWindow');
+		var commentaryWindow = new CommentaryWindow(GLOBAL,navi,
+			Questionnaire.prototype.quizView,
+			Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker-1],
+			Questionnaire.prototype.userAnswers[Questionnaire.prototype.userAnswers.length-1],
+			loading);
+		if(GLOBAL.IS_ANDROID){
+			navi.isComment = true;
+			navi.open(commentaryWindow,{animated:true});
+		}else{
+			commentaryWindow.open();
+		}
 	});
 	
 	return {'swipe':Questionnaire.prototype.swipe,'comment':Questionnaire.prototype.comment};
@@ -165,11 +191,12 @@ Questionnaire.prototype.evaluateAnswer = function(GLOBAL,choice,btnObj){
  */
 Questionnaire.prototype.setQuestionnaire = function(GLOBAL){
 	var newRow = Ti.UI.createView({
+		top:0,
 		left:'10dp',
 		//backgroundColor: 'blue',
 		width:Ti.UI.FILL,
-		height:Ti.UI.SIZE,
-		layout:'horizontal'
+		height:Ti.UI.SIZE
+		//layout:'horizontal'
 	});
 	var lblNumber = Ti.UI.createLabel({
 		//text: (Questionnaire.prototype.quizTracker + 1) + '. ',
@@ -182,8 +209,9 @@ Questionnaire.prototype.setQuestionnaire = function(GLOBAL){
 	var lblText = Ti.UI.createLabel({
 		text: Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].question.text,
 		font: {fontSize:'20dp'},
-		left: '3dp',
-		right:'3dp',
+		top:0,
+		left: (lblNumber.text.length==3)?'19dp':(lblNumber.text.length==4)?'28dp':'44dp',
+		right:'10dp',
 		color:'black'
 	});
 	
@@ -199,23 +227,31 @@ Questionnaire.prototype.setQuestionnaire = function(GLOBAL){
 			left:'10dp',
 			//backgroundColor: 'red',
 			width:Ti.UI.FILL,
-			height:Ti.UI.SIZE,
-			layout:'horizontal'
+			height:Ti.UI.SIZE
+			//layout:'horizontal'
 		});
 		var lblNumber = Ti.UI.createLabel({
 			text: (a + 1) + '. ',
 			font: {fontSize:'15dp'},
+			//backgroundColor: 'green',
 			top: 0,
 			left: '10dp',
 			color:'black'
 		});
 		var lblText = Ti.UI.createLabel({
-			text: GLOBAL.CONVERT(Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[a].text),
 			font: {fontSize:'15dp'},
-			left:'5dp',
-			right:'5dp',
+			//backgroundColor: 'yellow',
+			top: 0,
+			left:'30dp',
+			right: '5dp',
 			color:(Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[a].stateStr==='CORRECT')?'pink':'black'
 		});
+		if(GLOBAL.IS_ANDROID){
+			lblText.html = GLOBAL.CONVERT(Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[a].text);
+		}else{
+			
+			lblText.text = GLOBAL.CONVERT(Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[a].text);
+		}
 		
 		Questionnaire.prototype.theChoices.push(lblText);
 		newRow.add(lblNumber);
@@ -230,8 +266,15 @@ Questionnaire.prototype.nextQuestionnaireItem = function(GLOBAL){
 	//Questionnaire.prototype.theQuestionNumber.text = (Questionnaire.prototype.quizTracker + 1) + '. ';
 	Questionnaire.prototype.theQuestionNumber.text = (Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].question.id) + '. ';
 	Questionnaire.prototype.theQuestion.text = Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].question.text;
+	Questionnaire.prototype.theQuestion.left = (Questionnaire.prototype.theQuestionNumber.text.length==3)?'19dp':
+		(Questionnaire.prototype.theQuestionNumber.text.length==4)?'28dp':'44dp';
 	for (var x = 0; x<Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices.length; x++){
-		Questionnaire.prototype.theChoices[x].text = GLOBAL.CONVERT(Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[x].text);
+		var lblStr = GLOBAL.CONVERT(Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[x].text);
+		if (GLOBAL.IS_ANDROID){
+			Questionnaire.prototype.theChoices[x].html = lblStr;
+		}else{
+			Questionnaire.prototype.theChoices[x].text = lblStr;
+		}
 		Questionnaire.prototype.theChoices[x].color = (Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[x].stateStr==='CORRECT')?'pink':'black';
 	}
 	Questionnaire.prototype.quizTracker++;

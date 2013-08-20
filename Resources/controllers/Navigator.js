@@ -28,6 +28,9 @@ function Navigator(GLOBAL,baseWindow) {
 		var closing = function(win,animation){
 			if(win){
 				win.close();
+				if(navi.stack.length > 0){
+					navi.stack.pop();
+				}
 			}else{
 				if(navi.stack.length > 0){
 					if(navi.isInfo){
@@ -46,9 +49,19 @@ function Navigator(GLOBAL,baseWindow) {
 						});
 						confirm.addEventListener('click',function(event){
 							if(event.index == 0){ 
-								var lastWin = navi.stack.pop();
-								lastWin.close();
-								navi.isQuiz = false;
+								//if comment window is opened, remove it from stack and close it as well
+								if(navi.isComment){
+									var commentWindow = navi.stack.pop();
+									var quizWindow = navi.stack.pop();
+									quizWindow.close();
+									commentWindow.close();
+									navi.isComment = false;
+									navi.isQuiz = false;
+								}else{
+									var lastWin = navi.stack.pop();
+									lastWin.close();
+									navi.isQuiz = false;
+								}
 							}
 						});
 						confirm.show();
@@ -74,6 +87,7 @@ function Navigator(GLOBAL,baseWindow) {
 			stack: [],
 			isResult: false,
 			isQuiz: false,
+			isComment: false,
 			isInfo: false,
 			open : opening,
 			retryOpen: retryOpening,

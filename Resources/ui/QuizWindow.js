@@ -102,7 +102,7 @@ function QuizWindow(GLOBAL,navi,windowTitle,start,end,willSave,loading,questionn
 	Ti.API.info('questionnaireObjArr:'+JSON.stringify(questionnaireObjArr));
 	
 	
-	var setSwip = questionnaire.setSwipe(GLOBAL);
+	var setSwip = questionnaire.setSwipe(GLOBAL,navi,self,loading);
 	//add buttons
 	var results='';
 	var buttonC = [];
