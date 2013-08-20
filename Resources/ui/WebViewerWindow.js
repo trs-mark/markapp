@@ -18,6 +18,22 @@ function WebViewerWindow(GLOBAL,loading) {
 		webViewer.addEventListener('load',function(e){
 			loading.hideLoading();
 		});
+		
+		var customNavBar = Ti.UI.createView({
+			top:0,
+			width: Ti.UI.FILL,
+			height: '44dp',
+			backgroundColor: '#546C90'
+		});
+		var lblTitle = Ti.UI.createLabel({
+			text: 'WEB検索',
+			color: 'white',
+			font:{fontSize:'20dp',fontWeight:'BOLD'}
+		});
+		customNavBar.add(lblTitle);
+		webViewer.top='44dp';
+		self.add(customNavBar);
+		
 	}else{
 		self.addEventListener('postlayout',function(e){
 			loading.hideLoading();

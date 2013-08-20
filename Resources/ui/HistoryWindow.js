@@ -62,6 +62,23 @@ function HistoryWindow(GLOBAL,navi,loading) {
 		data: rowData
 	});
 	
+	if(GLOBAL.IS_ANDROID){
+		var customNavBar = Ti.UI.createView({
+			top:0,
+			width: Ti.UI.FILL,
+			height: '44dp',
+			backgroundColor: '#546C90'
+		});
+		var lblTitle = Ti.UI.createLabel({
+			text: '履歴一覧',
+			color: 'white',
+			font:{fontSize:'20dp',fontWeight:'BOLD'}
+		});
+		customNavBar.add(lblTitle);
+		tableView.top='44dp';
+		self.add(customNavBar);
+	}
+	
 	self.add(tableView);
 	
 	return self;

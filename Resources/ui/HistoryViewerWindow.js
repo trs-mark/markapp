@@ -4,8 +4,8 @@
 function HistoryViewerWindow(GLOBAL,navi,chapterTitle,dataObj,showRetry,loading) {
 	var self = Ti.UI.createWindow({
 		exitOnClose:false,
-		title:chapterTitle,
-		backgroundImage:GLOBAL.IMG_PATH + 'quiz_history_detail_bg.png'
+		//title:chapterTitle
+		//backgroundImage:GLOBAL.IMG_PATH + 'quiz_history_detail_bg.png'
 	});
 	if(GLOBAL.IS_ANDROID){
 		self.addEventListener('android:back',function(e){
@@ -47,6 +47,33 @@ function HistoryViewerWindow(GLOBAL,navi,chapterTitle,dataObj,showRetry,loading)
 	Ti.API.info(dataObj.answers);
 	var reviewr = new Reviewer(GLOBAL,historyView,dataObj.questionnaireObjArr,dataObj.answers);
 	
+	if(GLOBAL.IS_ANDROID){
+		var selfView = Ti.UI.createView({
+			backgroundImage:GLOBAL.IMG_PATH + 'quiz_history_detail_bg.png',
+			top:'44dp',
+			width:Ti.UI.FILL,
+			height:Ti.UI.FILL
+		});
+		var customNavBar = Ti.UI.createView({
+			top:0,
+			width: Ti.UI.FILL,
+			height: '44dp',
+			backgroundColor: '#546C90'
+		});
+		var lblTitle = Ti.UI.createLabel({
+			text: chapterTitle,
+			color: 'white',
+			font:{fontSize:'20dp',fontWeight:'BOLD'}
+		});
+		customNavBar.add(lblTitle);
+		selfView.top='44dp';
+		self.add(customNavBar);
+		self.add(selfView);
+		selfView.add(historyView);
+	}else{
+		self.add(historyView);
+	}
+	
 	//add retry button if not perfect
 	if(showRetry){
 		btnRetry.addEventListener('click',function(e){
@@ -61,12 +88,19 @@ function HistoryViewerWindow(GLOBAL,navi,chapterTitle,dataObj,showRetry,loading)
 				quizWindow.open();
 			}
 		});
-		self.add(btnRetry);
+		if(GLOBAL.IS_ANDROID){
+			selfView.add(btnRetry);
+		}else{
+			self.add(btnRetry);
+		}
 	}else{
 		historyView.top = historyView.bottom;
-		self.backgroundImage=GLOBAL.IMG_PATH + 'memo_bg.png';
+		if(GLOBAL.IS_ANDROID){
+			selfView.backgroundImage=GLOBAL.IMG_PATH + 'memo_bg.png';
+		}else{
+			self.backgroundImage=GLOBAL.IMG_PATH + 'memo_bg.png';
+		}
 	}
-	self.add(historyView);
 	
 	return self;
 }

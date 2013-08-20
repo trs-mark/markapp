@@ -29,7 +29,7 @@ function ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,userAnswers,correctCou
 		loading.hideLoading();
 	});
 	
-	if(!GLOBAL.IS_ANDROID){
+	
 		var selfView = Ti.UI.createView({
 			backgroundImage:GLOBAL.IMG_PATH + 'bg.png',
 			top:'44dp',
@@ -42,13 +42,6 @@ function ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,userAnswers,correctCou
 			top:0,
 			width: Ti.UI.FILL,
 			height: '44dp',
-			//backgroundColor: '#546C90',
-			backgroundGradient: {
-				type: 'linear',
-				startPoint: { x: '0%', y: '0%' },
-				endPoint: { x: '0%', y: '100%' },
-				colors: [ { color: '#546C90', offset: 1.0 }, { color: '#AFBED4', offset: 0.25 } ],
-			},
 			zIndex:500,
 		});
 		var lblTitle = Ti.UI.createLabel({
@@ -56,16 +49,28 @@ function ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,userAnswers,correctCou
 			color: 'white',
 			font:{fontSize:'20dp',fontWeight:'BOLD'}
 		});
-		btnBack.left = '10dp';
-		btnBack.width = '40dp';
-		btnBack.height = '30dp';
-		btnBack.color = '#37527D';
-		btnBack.style = Ti.UI.iPhone.SystemButtonStyle.BORDERED;
-		customNavBar.add(btnBack);
+		
+		if(GLOBAL.IS_ANDROID){
+			customNavBar.backgroundColor='#546C90';
+		}else{
+			customNavBar.backgroundGradient={
+				type: 'linear',
+				startPoint: { x: '0%', y: '0%' },
+				endPoint: { x: '0%', y: '100%' },
+				colors: [ { color: '#546C90', offset: 1.0 }, { color: '#AFBED4', offset: 0.25 } ],
+			};
+			btnBack.left = '10dp';
+			btnBack.width = '40dp';
+			btnBack.height = '30dp';
+			btnBack.color = '#37527D';
+			btnBack.style = Ti.UI.iPhone.SystemButtonStyle.BORDERED;
+			customNavBar.add(btnBack);
+		}
+		
 		customNavBar.add(lblTitle);
 		self.add(customNavBar);
 		self.add(selfView);
-	}
+	
 	
 	var resultScrollView = Titanium.UI.createScrollView({
 		showVerticalScrollIndicator:true,
@@ -184,11 +189,8 @@ function ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,userAnswers,correctCou
 	var reviewr = new Reviewer(GLOBAL,listView,questionnaireObj,userAnswers);
 	resultScrollView.add(listView);
 	
-	if(GLOBAL.IS_ANDROID){
-		self.add(resultScrollView);
-	}else{
 		selfView.add(resultScrollView);
-	}
+	
 	
 	return self;
 }
