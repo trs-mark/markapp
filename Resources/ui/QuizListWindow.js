@@ -46,8 +46,10 @@ function QuizListWindow(GLOBAL,navi,loading) {
 			var quizWindow = new QuizWindow(GLOBAL,navi,e.source.children[0].text,e.source.customRange.start,e.source.customRange.end,willSave,loading);
 			if(GLOBAL.IS_ANDROID){
 				navi.isQuiz = true;
+				navi.open(quizWindow,{animated:true});
+			}else{
+				quizWindow.open();
 			}
-			navi.open(quizWindow,{animated:true});
 		});
 		
 		rowData.push(row);

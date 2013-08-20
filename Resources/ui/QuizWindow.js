@@ -14,21 +14,68 @@ function QuizWindow(GLOBAL,navi,windowTitle,start,end,willSave,loading,questionn
 		});
 		confirm.addEventListener('click',function(event){
 			if(event.index == 0){ 
-				navi.close(self,{animated:true}); 
+				if(GLOBAL.IS_ANDROID){
+					navi.close(self,{animated:true});
+				}else{
+					self.close();
+				}
 			}
 		});
 		confirm.show();
 	});
 	
 	var self = Ti.UI.createWindow({
-		exitOnClose:false,
-		title:windowTitle,
-		backgroundImage:(GLOBAL.DEVICE_HEIGHT>=568)?GLOBAL.IMG_PATH + 'chapter_quiz_bg_2_i5.png':GLOBAL.IMG_PATH + 'chapter_quiz_bg_2.png',
-		leftNavButton: btnBack
+		exitOnClose:false
+		//title:windowTitle
+		//backgroundImage:(GLOBAL.DEVICE_HEIGHT>=568)?GLOBAL.IMG_PATH + 'chapter_quiz_bg_2_i5.png':GLOBAL.IMG_PATH + 'chapter_quiz_bg_2.png'
+		//leftNavButton: btnBack
 	});
+	if(GLOBAL.IS_ANDROID){
+		self.title = windowTitle;
+		self.backgroundImage=(GLOBAL.DEVICE_HEIGHT>=568)?GLOBAL.IMG_PATH + 'chapter_quiz_bg_2_i5.png':GLOBAL.IMG_PATH + 'chapter_quiz_bg_2.png';
+	}
 	self.addEventListener('postlayout',function(e){
 		loading.hideLoading();
 	});
+	
+	if(!GLOBAL.IS_ANDROID){
+		var selfView = Ti.UI.createView({
+			backgroundImage:(GLOBAL.DEVICE_HEIGHT>=568)?GLOBAL.IMG_PATH + 'chapter_quiz_bg_2_i5.png':GLOBAL.IMG_PATH + 'chapter_quiz_bg_2.png',
+			top:'44dp',
+			width:Ti.UI.FILL,
+			height:Ti.UI.FILL
+		});
+		
+		//custom nav bar - solution for crash on iPod touch due to manipulation of iphone nav bar buttons and routing
+		var customNavBar = Ti.UI.createView({
+			top:0,
+			width: Ti.UI.FILL,
+			height: '44dp',
+			//backgroundColor: '#546C90',
+			backgroundGradient: {
+				type: 'linear',
+				startPoint: { x: '0%', y: '0%' },
+				endPoint: { x: '0%', y: '100%' },
+				colors: [ { color: '#546C90', offset: 1.0 }, { color: '#AFBED4', offset: 0.25 } ],
+			},
+			zIndex:500,
+		});
+		var lblTitle = Ti.UI.createLabel({
+			text: windowTitle,
+			color: 'white',
+			font:{fontSize:'20dp',fontWeight:'BOLD'}
+		});
+		btnBack.left = '10dp';
+		btnBack.width = '40dp';
+		btnBack.height = '30dp';
+		btnBack.color = '#37527D';
+		btnBack.style = Ti.UI.iPhone.SystemButtonStyle.BORDERED;
+		customNavBar.add(btnBack);
+		customNavBar.add(lblTitle);
+		self.add(customNavBar);
+		self.add(selfView);
+	}
+	
 	
 	var Questionnaire = require('controllers/Questionnaire');
 	var questionnaire = new Questionnaire();
@@ -92,12 +139,22 @@ function QuizWindow(GLOBAL,navi,windowTitle,start,end,willSave,loading,questionn
 				setSwip.comment.setVisible(true);
 			}
 		});
-		self.add(btnChoice);
+		if(GLOBAL.IS_ANDROID){
+			self.add(btnChoice);
+		}else{
+			selfView.add(btnChoice);
+		}
 	}
 	var quizView = questionnaire.getQuizView(GLOBAL,navi,windowTitle,start,end,self,questionnaireObjArr,willSave,buttonC,loading);
-	self.add(quizView);
-	self.add(setSwip.swipe);
-	self.add(setSwip.comment);
+	if(GLOBAL.IS_ANDROID){
+		self.add(quizView);
+		self.add(setSwip.swipe);
+		self.add(setSwip.comment);
+	}else{
+		selfView.add(quizView);
+		selfView.add(setSwip.swipe);
+		selfView.add(setSwip.comment);
+	}
 	setSwip.swipe.setVisible(false);
 	setSwip.comment.setVisible(false);
 	return self;

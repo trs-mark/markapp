@@ -56,8 +56,10 @@ function HistoryViewerWindow(GLOBAL,navi,chapterTitle,dataObj,showRetry,loading)
 			var quizWindow = new QuizWindow(GLOBAL,navi,chapterTitle,dataObj.start,dataObj.end,willSave,loading,dataObj.mistakesObjArr);
 			if(GLOBAL.IS_ANDROID){
 				navi.isQuiz = true;
+				navi.open(quizWindow,{animated:true});
+			}else{
+				quizWindow.open();
 			}
-			navi.open(quizWindow,{animated:true});
 		});
 		self.add(btnRetry);
 	}else{

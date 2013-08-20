@@ -6,19 +6,66 @@ function ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,userAnswers,correctCou
 		title:'戻る'
 	});
 	btnBack.addEventListener('click',function(e){
-		navi.close(quizWindow,{animated:'true'});
-		navi.close(self,{animated:'true'});
+		if(GLOBAL.IS_ANDROID){
+			navi.close(quizWindow,{animated:'true'});
+			navi.close(self,{animated:'true'});
+		}else{
+			quizWindow.close();
+			self.close();
+		}
 	});
 	
 	var self = Ti.UI.createWindow({
-		exitOnClose:false,
-		title:'結果表示',
-		backgroundImage:GLOBAL.IMG_PATH + 'bg.png',
-		leftNavButton: btnBack
+		exitOnClose:false
+		//title:'結果表示'
+		//backgroundImage:GLOBAL.IMG_PATH + 'bg.png'
+		//leftNavButton: btnBack
 	});
+	if(GLOBAL.IS_ANDROID){
+		self.title = '結果表示';
+		self.backgroundImage = GLOBAL.IMG_PATH + 'bg.png';
+	}
 	self.addEventListener('postlayout',function(e){
 		loading.hideLoading();
 	});
+	
+	if(!GLOBAL.IS_ANDROID){
+		var selfView = Ti.UI.createView({
+			backgroundImage:GLOBAL.IMG_PATH + 'bg.png',
+			top:'44dp',
+			width:Ti.UI.FILL,
+			height:Ti.UI.FILL
+		});
+		
+		//custom nav bar - solution for crash on iPod touch due to manipulation of iphone nav bar buttons and routing
+		var customNavBar = Ti.UI.createView({
+			top:0,
+			width: Ti.UI.FILL,
+			height: '44dp',
+			//backgroundColor: '#546C90',
+			backgroundGradient: {
+				type: 'linear',
+				startPoint: { x: '0%', y: '0%' },
+				endPoint: { x: '0%', y: '100%' },
+				colors: [ { color: '#546C90', offset: 1.0 }, { color: '#AFBED4', offset: 0.25 } ],
+			},
+			zIndex:500,
+		});
+		var lblTitle = Ti.UI.createLabel({
+			text: '結果表示',
+			color: 'white',
+			font:{fontSize:'20dp',fontWeight:'BOLD'}
+		});
+		btnBack.left = '10dp';
+		btnBack.width = '40dp';
+		btnBack.height = '30dp';
+		btnBack.color = '#37527D';
+		btnBack.style = Ti.UI.iPhone.SystemButtonStyle.BORDERED;
+		customNavBar.add(btnBack);
+		customNavBar.add(lblTitle);
+		self.add(customNavBar);
+		self.add(selfView);
+	}
 	
 	var resultScrollView = Titanium.UI.createScrollView({
 		showVerticalScrollIndicator:true,
@@ -110,9 +157,12 @@ function ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,userAnswers,correctCou
 				navi.retryOpen(retryQuizWindow,{animated:true});
 			}else{
 				
-				navi.open(retryQuizWindow,{animated:true});
-				navi.close(quizWindow,{animated:true});
-				navi.close(self,{animated:true});
+				//navi.open(retryQuizWindow,{animated:true});
+				//navi.close(quizWindow,{animated:true});
+				//navi.close(self,{animated:true});
+				retryQuizWindow.open();
+				quizWindow.close();
+				self.close();
 			}
 		});
 		infoView.add(btnRetry);
@@ -134,7 +184,11 @@ function ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,userAnswers,correctCou
 	var reviewr = new Reviewer(GLOBAL,listView,questionnaireObj,userAnswers);
 	resultScrollView.add(listView);
 	
-	self.add(resultScrollView);
+	if(GLOBAL.IS_ANDROID){
+		self.add(resultScrollView);
+	}else{
+		selfView.add(resultScrollView);
+	}
 	
 	return self;
 }

@@ -54,8 +54,10 @@ Questionnaire.prototype.getQuizView = function(GLOBAL,navi,chapterTitle,start,en
 				if(GLOBAL.IS_ANDROID){
 					navi.isResult = true;
 					navi.isQuiz = false;
+					navi.open(resultWindow,{animated:true});
+				}else{
+					resultWindow.open();
 				}
-				navi.open(resultWindow,{animated:true});
 			}else{
 				if (Questionnaire.prototype.quizBreadCrumps == Questionnaire.prototype.quizTracker){
 					//next question
