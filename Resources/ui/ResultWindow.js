@@ -92,11 +92,11 @@ function ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,userAnswers,correctCou
 	infoView.add(imgResult);
 	
 	// display quiz result date
-	var mydate = new Date();
+	var nowDateTime = new Date();
 	var lblDate = Titanium.UI.createLabel({
 		color:'#666666',
-		text: mydate.getFullYear() + '年' + mydate.getMonth() + '月' + mydate.getDay() + '日　'
-		 + mydate.getHours() + '時' + mydate.getMinutes() + '分',
+		text: nowDateTime.getFullYear() + '年' + (nowDateTime.getMonth()+1) + '月' + nowDateTime.getDate() + '日　'
+		 + nowDateTime.getHours() + '時' + nowDateTime.getMinutes() + '分',
 		top: '50dp',
 		left: '70dp',
 		font:{fontSize:'18dp'}
@@ -107,7 +107,8 @@ function ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,userAnswers,correctCou
 	if(willSave){
 		var QuizHistory = require('models/QuizHistory');
 		var quizHistory = new QuizHistory();
-		quizHistory.addQuizHistory(GLOBAL,chapterTitle,start,questionnaireObj,mistakesObjArr,end,userAnswers,correctCount,mydate);
+		var nowDateTimeStr = nowDateTime.getFullYear() + '-' + (nowDateTime.getMonth()+1) + '-' + nowDateTime.getDate() + '-' + nowDateTime.getHours() + '-' + nowDateTime.getMinutes() + '-' + nowDateTime.getSeconds();
+		quizHistory.addQuizHistory(GLOBAL,chapterTitle,start,questionnaireObj,mistakesObjArr,end,userAnswers,correctCount,nowDateTimeStr);
 	}
 	
 	var lblChapterTitle = Titanium.UI.createLabel({

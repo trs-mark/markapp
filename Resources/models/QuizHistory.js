@@ -51,12 +51,13 @@ QuizHistory.prototype.getQuizHistory = function(GLOBAL){
 		var rs = db.execute(sql);
 		
 		while(rs.isValidRow()){
+			var quizDateTime = rs.fieldByName('datatime').split('-');
 			quizHistory.push({
 				chapterTitle:		rs.fieldByName('chaptertitle'),
 				dataObj:			JSON.parse(rs.fieldByName('quiz_data')),
 				questionCount:		rs.fieldByName('question_count'),
 				correctCount:		rs.fieldByName('correct_count'),
-				dateTime:			rs.fieldByName('datatime')
+				dateTime:			quizDateTime
 			});
 			rs.next();
 		}

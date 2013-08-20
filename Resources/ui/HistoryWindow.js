@@ -26,20 +26,51 @@ function HistoryWindow(GLOBAL,navi,loading) {
 			selectedBackgroundColor:'#015FE7',
 			backgroundColor:'#FFFFFF'
 		});
+		
+		//the date time
+		row.add(Ti.UI.createLabel({
+			color:'#666666',
+			text: history[i].dateTime[0] + '年' +  history[i].dateTime[1] + '月' +  history[i].dateTime[2] + '日 '
+		+  history[i].dateTime[3] + '時' +  history[i].dateTime[4] + '分',
+			top: '10dp',
+			left: '10dp',
+			height: 'auto',
+			font:{fontSize:'16dp'},
+			touchEnabled: false
+		}));
+		//the correct count
+		row.add(Ti.UI.createLabel({
+			color:'#457CBA',
+			text: history[i].correctCount,
+			top: '10dp',
+			right: '80dp',
+			font:{fontSize:'38dp'},
+			height: 'auto',
+			touchEnabled: false
+		}));
+		//the total items
 		row.add(Ti.UI.createLabel({
 			color:'#3F0000',
-			text: history[i].chapterTitle +'\n' +
-					history[i].correctCount + '/' + history[i].questionCount + '\n' +
-					history[i].dateTime,
-			font:{fontSize:'20dp',},
-			top: '12dp',
+			text: '/ ' + history[i].questionCount,
+			top: '10dp',
+			right: '5dp',
+			font:{fontSize:'38dp'},
+			height: 'auto',
+			touchEnabled: false
+		}));
+		//the chapter title
+		row.add(Ti.UI.createLabel({
+			color:'#FF7F0C',
+			text:history[i].chapterTitle,
+			top: '60dp',
 			left: '10dp',
+			height: 'auto',
 			touchEnabled: false
 		}));
 		row.add(Ti.UI.createImageView({
 			image:GLOBAL.IMG_PATH + 'arrow.png',
 			right:0, bottom: 0,
-			width:20, height: 20,
+			width:22, height: 22,
 			touchEnabled: false
 		}));
 		row.addEventListener('click', function(e){
