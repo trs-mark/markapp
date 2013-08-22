@@ -191,24 +191,21 @@ Questionnaire.prototype.evaluateAnswer = function(GLOBAL,choice,btnObj){
  */
 Questionnaire.prototype.setQuestionnaire = function(GLOBAL){
 	var newRow = Ti.UI.createView({
-		top:0,
+		top:'20dp',
 		left:'10dp',
-		//backgroundColor: 'blue',
-		width:Ti.UI.FILL,
+		right:'10dp',
 		height:Ti.UI.SIZE
-		//layout:'horizontal'
 	});
 	var lblNumber = Ti.UI.createLabel({
-		//text: (Questionnaire.prototype.quizTracker + 1) + '. ',
 		text: (Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].question.id) + '. ',
-		font: {fontSize:'20dp'},
+		font: {fontSize:'16dp'},
 		top: 0,
 		left: 0,
 		color:'black'
 	});
 	var lblText = Ti.UI.createLabel({
 		text: Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].question.text,
-		font: {fontSize:'20dp'},
+		font: {fontSize:'16dp'},
 		top:0,
 		left: (lblNumber.text.length==3)?'19dp':(lblNumber.text.length==4)?'28dp':'44dp',
 		right:'10dp',
@@ -225,31 +222,26 @@ Questionnaire.prototype.setQuestionnaire = function(GLOBAL){
 		var newRow = Ti.UI.createView({
 			top:'5dp',
 			left:'10dp',
-			//backgroundColor: 'red',
-			width:Ti.UI.FILL,
+			right:'10dp',
 			height:Ti.UI.SIZE
-			//layout:'horizontal'
 		});
 		var lblNumber = Ti.UI.createLabel({
-			text: (a + 1) + '. ',
-			font: {fontSize:'15dp'},
-			//backgroundColor: 'green',
+			text: '(' + (a + 1) + ') ',
+			font: {fontSize:'13dp'},
 			top: 0,
-			left: '10dp',
-			color:'black'
+			left: 0,
+			color:'#3F0000'
 		});
 		var lblText = Ti.UI.createLabel({
-			font: {fontSize:'15dp'},
-			//backgroundColor: 'yellow',
+			font: {fontSize:'13dp'},
 			top: 0,
 			left:'30dp',
 			right: '5dp',
-			color:(Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[a].stateStr==='CORRECT')?'pink':'black'
+			color:(Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[a].stateStr==='CORRECT')?'pink':'#3F0000'
 		});
 		if(GLOBAL.IS_ANDROID){
 			lblText.html = GLOBAL.CONVERT(Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[a].text);
 		}else{
-			
 			lblText.text = GLOBAL.CONVERT(Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[a].text);
 		}
 		
@@ -263,7 +255,6 @@ Questionnaire.prototype.setQuestionnaire = function(GLOBAL){
 };
 
 Questionnaire.prototype.nextQuestionnaireItem = function(GLOBAL){
-	//Questionnaire.prototype.theQuestionNumber.text = (Questionnaire.prototype.quizTracker + 1) + '. ';
 	Questionnaire.prototype.theQuestionNumber.text = (Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].question.id) + '. ';
 	Questionnaire.prototype.theQuestion.text = Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].question.text;
 	Questionnaire.prototype.theQuestion.left = (Questionnaire.prototype.theQuestionNumber.text.length==3)?'19dp':
@@ -275,7 +266,7 @@ Questionnaire.prototype.nextQuestionnaireItem = function(GLOBAL){
 		}else{
 			Questionnaire.prototype.theChoices[x].text = lblStr;
 		}
-		Questionnaire.prototype.theChoices[x].color = (Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[x].stateStr==='CORRECT')?'pink':'black';
+		Questionnaire.prototype.theChoices[x].color = (Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker].choices[x].stateStr==='CORRECT')?'pink':'#3F0000';
 	}
 	Questionnaire.prototype.quizTracker++;
 };

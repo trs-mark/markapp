@@ -20,10 +20,15 @@ function CommentaryWindow(GLOBAL,navi,quizView,questionnaireObj,selectedAnswer,l
 	self.add(selfView);
 	
 	if(GLOBAL.DEVICE_HEIGHT < 800){
-		var btm ='95dp';
-	}else{
+		if(GLOBAL.DEVICE_HEIGHT==568 && GLOBAL.DEVICE_WIDTH==320){//if iphone5 size
+			var btm = '115dp';
+		}else{//if normal iphone4 size
+			var btm ='95dp';
+		}
+	}else{//if android Samsung S3 like height
 		var btm ='110dp';
 	}
+	
 	var selfScrollView = Ti.UI.createScrollView({
 		showVerticalScrollIndicator:true,
 		contentHeight:Ti.UI.SIZE,
@@ -31,7 +36,7 @@ function CommentaryWindow(GLOBAL,navi,quizView,questionnaireObj,selectedAnswer,l
 		top:'15dp',
 		left: '13dp',
 		right: '13dp',
-		bottom:(GLOBAL.IS_ANDROID)?btm:'95dp',
+		bottom:btm,
 		layout:'vertical'
 	});
 	selfView.add(selfScrollView);

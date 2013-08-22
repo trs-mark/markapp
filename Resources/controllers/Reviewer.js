@@ -8,23 +8,21 @@ function Reviewer(){};
 Reviewer.prototype.setAsResult = function(GLOBAL,listView, questionnaireObj, userAnswers){
 	for (var x=0; x<questionnaireObj.length; x++){
 		var newRow = Ti.UI.createView({
-			top:'10dp',
-			left:'5dp',
-			//backgroundColor: 'blue',
-			width:Ti.UI.FILL,
+			top:'20dp',
+			left:'10dp',
+			right:'10dp',
 			height:Ti.UI.SIZE
-			//layout:'horizontal'
 		});
 		var lblNumber = Ti.UI.createLabel({
 			text: (questionnaireObj[x].question.id) + '. ',
-			font: {fontSize:'20dp'},
+			font: {fontSize:'16dp'},
 			top: 0,
 			left: 0,
 			color:'black'
 		});
 		var lblText = Ti.UI.createLabel({
 			text: questionnaireObj[x].question.text,
-			font: {fontSize:'20dp'},
+			font: {fontSize:'16dp'},
 			top:0,
 			left: (lblNumber.text.length==3)?'19dp':(lblNumber.text.length==4)?'28dp':'44dp',
 			color:'black'
@@ -36,25 +34,23 @@ Reviewer.prototype.setAsResult = function(GLOBAL,listView, questionnaireObj, use
 		for (var a = 0; a<questionnaireObj[x].choices.length; a++){
 			var newRow = Ti.UI.createView({
 				top:'5dp',
-				left:'5dp',
-				//backgroundColor: 'red',
-				width:Ti.UI.FILL,
+				left:'10dp',
+				right:'10dp',
 				height:Ti.UI.SIZE
-				//layout:'horizontal'
 			});
 			var lblNumber = Ti.UI.createLabel({
-				text: (a + 1) + '. ',
-				font: {fontSize:'15dp'},
+				text: '(' + (a + 1) + ')',
+				font: {fontSize:'13dp'},
 				top: 0,
-				left: '10dp',
-				color:'black'
+				left: 0,
+				color:'#3F0000'
 			});
 			var lblText = Ti.UI.createLabel({
-				font: {fontSize:'15dp'},
+				font: {fontSize:'13dp'},
 				top:0,
 				left:'30dp',
-				right:'10dp',
-				color:'black'
+				right:'5dp',
+				color:'#3F0000'
 			});
 			if(GLOBAL.IS_ANDROID){
 				lblText.html = GLOBAL.CONVERT(questionnaireObj[x].choices[a].text);
@@ -77,7 +73,6 @@ Reviewer.prototype.setAsResult = function(GLOBAL,listView, questionnaireObj, use
 		
 		var separatorRow = Ti.UI.createView({
 			top:'10dp',
-			//backgroundColor: 'pink',
 			width:Ti.UI.FILL,
 			height:Ti.UI.SIZE
 		});
@@ -101,12 +96,10 @@ Reviewer.prototype.setAsCommentary = function(GLOBAL,listView, questionnaireObj,
 	//add commentary
 	for (var c=0; c<commentsObjArr.length; c++){
 		var newRow = Ti.UI.createView({
-			top:'2dp',
-			left:'5dp',
-			width:Ti.UI.FILL,
-			height:Ti.UI.SIZE,
-			//backgroundColor: 'green'
-			//layout:'horizontal'
+			top:'10dp',
+			left:'10dp',
+			right:'10dp',
+			height:Ti.UI.SIZE
 		});
 		var lblNumber = Ti.UI.createLabel({
 			text: '(' + (c+1) + ')',
@@ -126,7 +119,7 @@ Reviewer.prototype.setAsCommentary = function(GLOBAL,listView, questionnaireObj,
 			lblStr + ' (P' + commentsObjArr[c].ref_no + ')';
 			
 		var lblText = Ti.UI.createLabel({
-			font: {fontSize:'10dp'},
+			font: {fontSize:'13dp'},
 			top:0,
 			left: '15dp',
 			color:'black'
@@ -147,8 +140,7 @@ Reviewer.prototype.setAsCommentary = function(GLOBAL,listView, questionnaireObj,
 	Ti.API.info(JSON.stringify(questionnaireObj[0].choices[3]));
 	Ti.API.info(JSON.stringify(questionnaireObj[0].choices[4]));
 	var separatorRow = Ti.UI.createView({
-		top:'10dp',
-		//backgroundColor: 'pink',
+		top:'50dp',
 		width:Ti.UI.FILL,
 		height:Ti.UI.SIZE
 	});
@@ -164,23 +156,21 @@ Reviewer.prototype.setAsCommentary = function(GLOBAL,listView, questionnaireObj,
 	
 	for (var x=0; x<questionnaireObj.length; x++){
 		var newRow = Ti.UI.createView({
-			top:'10dp',
-			left:'5dp',
-			width:Ti.UI.FILL,
+			top:'20dp',
+			left:'10dp',
+			right:'10dp',
 			height:Ti.UI.SIZE,
-			//backgroundColor:'blue'
-			//layout:'horizontal'
 		});
 		var lblNumber = Ti.UI.createLabel({
 			text: (questionnaireObj[x].question.id) + '. ',
-			font: {fontSize:'20dp'},
+			font: {fontSize:'16dp'},
 			top: 0,
 			left: 0,
 			color:'black'
 		});
 		var lblText = Ti.UI.createLabel({
 			text: questionnaireObj[x].question.text,
-			font: {fontSize:'20dp'},
+			font: {fontSize:'16dp'},
 			top:0,
 			left: (lblNumber.text.length==3)?'19dp':(lblNumber.text.length==4)?'28dp':'44dp',
 			color:'black'
@@ -192,25 +182,23 @@ Reviewer.prototype.setAsCommentary = function(GLOBAL,listView, questionnaireObj,
 		for (var a = 0; a<questionnaireObj[x].choices.length; a++){
 			var newRow = Ti.UI.createView({
 				top:'5dp',
-				left:'5dp',
-				//backgroundColor: 'red',
-				width:Ti.UI.FILL,
+				left:'10dp',
+				right:'10dp',
 				height:Ti.UI.SIZE
-				//layout:'horizontal'
 			});
 			var lblNumber = Ti.UI.createLabel({
-				text: (a + 1) + '. ',
-				font: {fontSize:'15dp'},
+				text: '(' + (a + 1) + ')',
+				font: {fontSize:'13dp'},
 				top: 0,
-				left: '10dp',
-				color:'black'
+				left: 0,
+				color:'#3F0000'
 			});
 			var lblText = Ti.UI.createLabel({
-				font: {fontSize:'15dp'},
+				font: {fontSize:'13dp'},
 				top:0,
-				left:'25dp',
-				right:'10dp',
-				color:'black'
+				left:'30dp',
+				right:'5dp',
+				color:'#3F0000'
 			});
 			if(GLOBAL.IS_ANDROID){
 				lblText.html = GLOBAL.CONVERT(questionnaireObj[x].choices[a].text);
