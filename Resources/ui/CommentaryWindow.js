@@ -49,18 +49,23 @@ function CommentaryWindow(GLOBAL,navi,quizView,questionnaireObj,selectedAnswer,l
 		backgroundImage:GLOBAL.IMG_PATH + 'commentary_b1_long.png',
 		top:'81%',
 		width:'246dp',
-		height:'20%'
+		height:'20%',
+		customClickFlag:false
 	});
 	if (GLOBAL.IS_ANDROID) {
 		btnQuiz.backgroundSelectedImage = GLOBAL.IMG_PATH + 'commentary_b1_long_selected.png';
 	}
 	btnQuiz.addEventListener('click',function(e){
-		quizView.fireEvent('afterComment');
-		if(GLOBAL.IS_ANDROID){
-			navi.close(self,{animated:true});
-			navi.isComment = false;
-		}else{
-			self.close();
+		if(!e.source.customClickFlag){
+			quizView.fireEvent('afterComment');
+			if(GLOBAL.IS_ANDROID){
+				navi.close(self,{animated:true});
+				navi.isComment = false;
+			}else{
+				self.close();
+			}
+			//custom flag for trapping only once action
+			e.source.customClickFlag = true;
 		}
 	});
 	selfView.add(btnQuiz);

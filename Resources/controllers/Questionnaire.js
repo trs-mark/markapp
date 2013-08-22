@@ -34,28 +34,34 @@ Questionnaire.prototype.getQuizView = function(GLOBAL,navi,chapterTitle,start,en
 		left:'10dp',
 		right:'10dp',
 		bottom:'95dp',
-		layout:'vertical'
+		layout:'vertical',
+		customResultFlag:true
 	});
 	var nextPage = function(){
 		Ti.API.info('crums:' +Questionnaire.prototype.quizBreadCrumps);
 		Ti.API.info('quiz tracker:' + Questionnaire.prototype.quizTracker);
 		if(Questionnaire.prototype.quizBreadCrumps >= Questionnaire.prototype.questionnaireObj.length){
-			//go to result
-			loading.showLoading(quizWindow,'Loading...',1.0);
-			var ResultWindow = require('ui/ResultWindow');
-			var resultWindow = new ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,
-				Questionnaire.prototype.userAnswers,
-				Questionnaire.prototype.correctCount,
-				start,end,
-				Questionnaire.prototype.questionnaireObj,
-				Questionnaire.prototype.mistakesObjArr,
-				willSave,loading);
-			if(GLOBAL.IS_ANDROID){
-				navi.isResult = true;
-				navi.isQuiz = false;
-				navi.open(resultWindow,{animated:true});
-			}else{
-				resultWindow.open();
+			//trap to ensure result page only loads once
+			if(Questionnaire.prototype.quizView.customResultFlag){
+				Questionnaire.prototype.quizView.customResultFlag = false;
+				//go to result
+				loading.showLoading(quizWindow,'Loading...',1.0);
+				var ResultWindow = require('ui/ResultWindow');
+				var resultWindow = new ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,
+					Questionnaire.prototype.userAnswers,
+					Questionnaire.prototype.correctCount,
+					start,end,
+					Questionnaire.prototype.questionnaireObj,
+					Questionnaire.prototype.mistakesObjArr,
+					willSave,loading);
+				if(GLOBAL.IS_ANDROID){
+					navi.isResult = true;
+					navi.isQuiz = false;
+					navi.isComment = false;
+					navi.open(resultWindow,{animated:true});
+				}else{
+					resultWindow.open();
+				}
 			}
 		}else{
 			if (Questionnaire.prototype.quizBreadCrumps == Questionnaire.prototype.quizTracker){
@@ -110,26 +116,30 @@ Questionnaire.prototype.setSwipe = function(GLOBAL,navi,quizWindow,loading){
 		left:'184dp',
 		width:'108dp',
 		height:'66.5dp',
-		zIndex: 3
+		zIndex: 3,
+		customClickFlag:false
 	});
 	if(GLOBAL.IS_ANDROID){
-		Questionnaire.prototype.comment.backgroundSelectedImage = GLOBAL.IMG_PATH +'commentary_new_selected.png';
+		Questionnaire.prototype.comment.backgroundSelectedImage = GLOBAL.IMG_PATH +'commentary_selected_new.png';
 	}
 	
 	Questionnaire.prototype.comment.addEventListener('click',function(e){
-		//alert(Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker-1].question.text);
-		loading.showLoading(quizWindow,'Loading...',0.5);
-		var CommentaryWindow = require('ui/CommentaryWindow');
-		var commentaryWindow = new CommentaryWindow(GLOBAL,navi,
-			Questionnaire.prototype.quizView,
-			Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker-1],
-			Questionnaire.prototype.userAnswers[Questionnaire.prototype.userAnswers.length-1],
-			loading);
-		if(GLOBAL.IS_ANDROID){
-			navi.isComment = true;
-			navi.open(commentaryWindow,{animated:true});
-		}else{
-			commentaryWindow.open();
+		if(!e.source.customClickFlag){
+			loading.showLoading(quizWindow,'Loading...',0.5,e.source);
+			var CommentaryWindow = require('ui/CommentaryWindow');
+			var commentaryWindow = new CommentaryWindow(GLOBAL,navi,
+				Questionnaire.prototype.quizView,
+				Questionnaire.prototype.questionnaireObj[Questionnaire.prototype.quizTracker-1],
+				Questionnaire.prototype.userAnswers[Questionnaire.prototype.userAnswers.length-1],
+				loading);
+			if(GLOBAL.IS_ANDROID){
+				navi.isComment = true;
+				navi.open(commentaryWindow,{animated:true});
+			}else{
+				commentaryWindow.open();
+			}
+			//custom flag for trapping only once action
+			e.source.customClickFlag = true;
 		}
 	});
 	
@@ -181,6 +191,7 @@ Questionnaire.prototype.evaluateAnswer = function(GLOBAL,choice,btnObj){
 		Questionnaire.prototype.quizBreadCrumps++;
 	}else{
 		result = 'no more';
+		return null;
 	}
 	return resultQ;
 };

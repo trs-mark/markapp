@@ -6,7 +6,8 @@ function MainWindow(GLOBAL) {
 	var containerWindow = Ti.UI.createWindow();
 	
 	var btnInfo = Ti.UI.createButton({
-		title: 'info'
+		title: 'info',
+		customClickFlag:false
 	});
 	
 	var infoAction = function(events){
@@ -17,11 +18,11 @@ function MainWindow(GLOBAL) {
 				GLOBAL.COPYRIGHT + "\n" +
 				GLOBAL.COMPANY + "\n",
 			buttonNames: ['開発者を表示','閉じる'], 
-			cancel: 1,
+			cancel: 1
 		});
 		verAlertDialog.addEventListener('click',function(event){
 			if(event.index == 0){
-				loading.showLoading(containerWindow,'Loading...',0.5);
+				loading.showLoading(containerWindow,'Loading...',0.5,btnInfo);
 				WebViewerWindow = require('ui/WebViewerWindow');
 				var webViewerWindow = new WebViewerWindow(GLOBAL,loading);
 				if(GLOBAL.IS_ANDROID){
@@ -60,17 +61,30 @@ function MainWindow(GLOBAL) {
 						activity.finish();
 					}
 				});
+			}else{
+				//check if top menu
+				if(navi.stack.length <= 0){
+					GLOBAL.IS_TOP_MENU = true;
+				}
 			}
 		});
 		var activity = baseWindow.activity;
 		
+		var INFO = 1;
+		
 		activity.onCreateOptionsMenu = function(e){
 			var menu = e.menu;
 			var menuItem = menu.add({ 
-				title: "Info", 
+				title: "バージョン情報",
+				itemId: INFO,
 				//icon:  "item1.png"
 			});
 			menuItem.addEventListener("click", infoAction);
+		};
+		
+		activity.onPrepareOptionsMenu = function(e){
+			var menu = e.menu;
+			menu.findItem(INFO).setVisible(GLOBAL.IS_TOP_MENU);
 		};
 	}
 	
@@ -107,13 +121,18 @@ function MainWindow(GLOBAL) {
 		backgroundImage: GLOBAL.IMG_PATH + 'top_btn_quiz_long.png',
 		top:'255dp',
 		width:'246dp',
-		height:'79dp'
+		height:'79dp',
+		customClickFlag:false
 	});
 	btnQuiz.addEventListener('click',function(e){
-		loading.showLoading(containerWindow,'Loading...',0.5);
-		var QuizListWindow = require('ui/QuizListWindow');
-		var quizListWindow = new QuizListWindow(GLOBAL,navi,loading);
-		navi.open(quizListWindow,{animated:true});
+		if(!e.source.customClickFlag){
+			loading.showLoading(containerWindow,'Loading...',0.5,e.source);
+			var QuizListWindow = require('ui/QuizListWindow');
+			var quizListWindow = new QuizListWindow(GLOBAL,navi,loading);
+			navi.open(quizListWindow,{animated:true});
+			//custom flag for trapping only once action
+			e.source.customClickFlag = true;
+		}
 	});
 	
 	// create history button
@@ -121,13 +140,18 @@ function MainWindow(GLOBAL) {
 		backgroundImage: GLOBAL.IMG_PATH + 'top_btn_history_long.png',
 		top:'330dp',
 		width:'246dp',
-		height:'79dp'
+		height:'79dp',
+		customClickFlag:false
 	});
 	btnHistory.addEventListener('click',function(e){
-		loading.showLoading(containerWindow,'Loading...',0.5);
-		var HistoryWindow = require('ui/HistoryWindow');
-		var historyWindow = new HistoryWindow(GLOBAL,navi,loading);
-		navi.open(historyWindow,{animated:true});
+		if(!e.source.customClickFlag){
+			loading.showLoading(containerWindow,'Loading...',0.5,e.source);
+			var HistoryWindow = require('ui/HistoryWindow');
+			var historyWindow = new HistoryWindow(GLOBAL,navi,loading);
+			navi.open(historyWindow,{animated:true});
+			//custom flag for trapping only once action
+			e.source.customClickFlag = true;
+		}
 	});
 	
 	if(GLOBAL.IS_ANDROID){

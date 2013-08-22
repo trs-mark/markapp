@@ -26,7 +26,8 @@ function QuizListWindow(GLOBAL,navi,loading) {
 			customRange: range[i],
 			height:'45dp',
 			selectedBackgroundColor:'#015FE7',
-			backgroundColor:'#FFFFFF'
+			backgroundColor:'#FFFFFF',
+			customClickFlag:false
 		});
 		row.add(Ti.UI.createLabel({
 			color:'#3F0000',
@@ -44,15 +45,19 @@ function QuizListWindow(GLOBAL,navi,loading) {
 			touchEnabled: false
 		}));
 		row.addEventListener('click', function(e){
-			loading.showLoading2('Loading...',1.0);
-			var QuizWindow = require('ui/QuizWindow');
-			var willSave = true;
-			var quizWindow = new QuizWindow(GLOBAL,navi,e.source.children[0].text,e.source.customRange.start,e.source.customRange.end,willSave,loading);
-			if(GLOBAL.IS_ANDROID){
-				navi.isQuiz = true;
-				navi.open(quizWindow,{animated:true});
-			}else{
-				quizWindow.open();
+			if(!e.source.customClickFlag){
+				loading.showLoading2('Loading...',1.0,e.source);
+				var QuizWindow = require('ui/QuizWindow');
+				var willSave = true;
+				var quizWindow = new QuizWindow(GLOBAL,navi,e.source.children[0].text,e.source.customRange.start,e.source.customRange.end,willSave,loading);
+				if(GLOBAL.IS_ANDROID){
+					navi.isQuiz = true;
+					navi.open(quizWindow,{animated:true});
+				}else{
+					quizWindow.open();
+				}
+				//custom flag for trapping only once action
+				e.source.customClickFlag = true;
 			}
 		});
 		

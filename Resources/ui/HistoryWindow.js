@@ -24,7 +24,8 @@ function HistoryWindow(GLOBAL,navi,loading) {
 			customId: i,
 			height:Ti.UI.SIZE,
 			selectedBackgroundColor:'#015FE7',
-			backgroundColor:'#FFFFFF'
+			backgroundColor:'#FFFFFF',
+			customClickFlag:false
 		});
 		
 		//the date time
@@ -74,13 +75,17 @@ function HistoryWindow(GLOBAL,navi,loading) {
 			touchEnabled: false
 		}));
 		row.addEventListener('click', function(e){
-			loading.showLoading2('Loading...',1.0);
-			var x = e.source.customId;
-			var HistoryViewerWindow = require('ui/HistoryViewerWindow');
-			Ti.API.info(JSON.stringify(history[x].dataObj));
-			var showRetry = (history[x].questionCount == history[x].correctCount)?false:true;
-			var historyViewerWindow = new HistoryViewerWindow(GLOBAL,navi,history[x].chapterTitle,history[x].dataObj,showRetry,loading);
-			navi.open(historyViewerWindow,{animated:true});
+			if(!e.source.customClickFlag){
+				loading.showLoading2('Loading...',1.0,e.source);
+				var x = e.source.customId;
+				var HistoryViewerWindow = require('ui/HistoryViewerWindow');
+				Ti.API.info(JSON.stringify(history[x].dataObj));
+				var showRetry = (history[x].questionCount == history[x].correctCount)?false:true;
+				var historyViewerWindow = new HistoryViewerWindow(GLOBAL,navi,history[x].chapterTitle,history[x].dataObj,showRetry,loading);
+				navi.open(historyViewerWindow,{animated:true});
+				//custom flag for trapping only once action
+				e.source.customClickFlag = true;
+			}
 		});
 		
 		rowData.push(row);

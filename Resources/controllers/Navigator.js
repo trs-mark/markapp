@@ -9,6 +9,7 @@ function Navigator(GLOBAL,baseWindow) {
 		var opening = function(win,animation){
 			navi.stack.push(win);
 			win.open();
+			GLOBAL.IS_TOP_MENU = false;
 		};
 		var retryOpening = function(win,animation){
 			if(navi.stack.length > 0){
@@ -65,6 +66,7 @@ function Navigator(GLOBAL,baseWindow) {
 							}
 						});
 						confirm.show();
+						return false;
 					}else{
 						//double pop if it is result page
 						if (navi.isResult){
@@ -77,6 +79,7 @@ function Navigator(GLOBAL,baseWindow) {
 							var lastWin = navi.stack.pop();
 							lastWin.close();
 						}
+						return false;
 					}
 				}else{
 					return true;

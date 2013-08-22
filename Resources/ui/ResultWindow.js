@@ -3,15 +3,21 @@
  */
 function ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,userAnswers,correctCount,start,end,questionnaireObj,mistakesObjArr,willSave,loading) {
 	var btnBack = Ti.UI.createButton({
-		title:'戻る'
+		//title:'戻る',
+		customClickFlag:false,
+		backgroundImage: GLOBAL.IMG_PATH + 'finish.png'
 	});
 	btnBack.addEventListener('click',function(e){
-		if(GLOBAL.IS_ANDROID){
-			navi.close(quizWindow,{animated:'true'});
-			navi.close(self,{animated:'true'});
-		}else{
-			quizWindow.close();
-			self.close();
+		if(!e.source.customClickFlag){
+			if(GLOBAL.IS_ANDROID){
+				navi.close(quizWindow,{animated:'true'});
+				navi.close(self,{animated:'true'});
+			}else{
+				quizWindow.close();
+				self.close();
+			}
+			//custom flag for trapping only once action
+			e.source.customClickFlag = true;
 		}
 	});
 	
@@ -60,10 +66,10 @@ function ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,userAnswers,correctCou
 				colors: [ { color: '#546C90', offset: 1.0 }, { color: '#AFBED4', offset: 0.25 } ],
 			};
 			btnBack.left = '10dp';
-			btnBack.width = '40dp';
+			btnBack.width = '48dp';
 			btnBack.height = '30dp';
 			btnBack.color = '#37527D';
-			btnBack.style = Ti.UI.iPhone.SystemButtonStyle.BORDERED;
+			//btnBack.style = Ti.UI.iPhone.SystemButtonStyle.BORDERED;
 			customNavBar.add(btnBack);
 		}
 		
@@ -146,7 +152,8 @@ function ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,userAnswers,correctCou
 		backgroundImage:GLOBAL.IMG_PATH + 'result_btn_tryagain.png',
 		left:'30dp',
 		right:'30dp',
-		height:'75dp'
+		height:'75dp',
+		customClickFlag:false
 	});
 	if (!GLOBAL.IS_ANDROID) {btnRetry.top = '226dp';}
 	else{
@@ -156,21 +163,21 @@ function ResultWindow(GLOBAL,navi,quizWindow,chapterTitle,userAnswers,correctCou
 	//add retry button if not perfect
 	if(correctCount != userAnswers.length){
 		btnRetry.addEventListener('click',function(e){
-			loading.showLoading(self,'Loading...',1.0);
-			var QuizWindow = require('ui/QuizWindow');
-			var willSave = false;
-			var retryQuizWindow = new QuizWindow(GLOBAL,navi,chapterTitle,start,end,willSave,loading,mistakesObjArr);
-			if(GLOBAL.IS_ANDROID){
-				navi.isQuiz = true;
-				navi.retryOpen(retryQuizWindow,{animated:true});
-			}else{
-				
-				//navi.open(retryQuizWindow,{animated:true});
-				//navi.close(quizWindow,{animated:true});
-				//navi.close(self,{animated:true});
-				retryQuizWindow.open();
-				quizWindow.close();
-				self.close();
+			if(!e.source.customClickFlag){
+				loading.showLoading(self,'Loading...',1.0,e.source);
+				var QuizWindow = require('ui/QuizWindow');
+				var willSave = false;
+				var retryQuizWindow = new QuizWindow(GLOBAL,navi,chapterTitle,start,end,willSave,loading,mistakesObjArr);
+				if(GLOBAL.IS_ANDROID){
+					navi.isQuiz = true;
+					navi.retryOpen(retryQuizWindow,{animated:true});
+				}else{
+					retryQuizWindow.open();
+					quizWindow.close();
+					self.close();
+				}
+				//custom flag for trapping only once action
+				e.source.customClickFlag = true;
 			}
 		});
 		infoView.add(btnRetry);

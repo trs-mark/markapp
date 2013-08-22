@@ -8,6 +8,8 @@ function ActivityIndicator(win) {
 
 //activitiy indicator reference
 ActivityIndicator.prototype.loading = null;
+//reference to the button that triggered the loading
+ActivityIndicator.prototype.btnSource = null;
 //osname of device
 ActivityIndicator.prototype.osname = Ti.Platform.osname;
 
@@ -47,7 +49,10 @@ ActivityIndicator.prototype.createActInd = function(message, transparency, win){
  * @param {String} message
  * @param {float} transparency
  */
-ActivityIndicator.prototype.showLoading = function(win, message,transparency){
+ActivityIndicator.prototype.showLoading = function(win, message,transparency,source){
+	if(source){
+		ActivityIndicator.prototype.btnSource = source;
+	}
 	ActivityIndicator.prototype.loading = ActivityIndicator.prototype.createActInd(message, transparency, win);
 	if(ActivityIndicator.prototype.osname==='iphone' || ActivityIndicator.prototype.osname==='ipad'){
 		ActivityIndicator.prototype.loading[0].visible = true;
@@ -60,7 +65,10 @@ ActivityIndicator.prototype.showLoading = function(win, message,transparency){
  * @param {String} message
  * @param {float} transparency
  */
-ActivityIndicator.prototype.showLoading2 = function(message,transparency){
+ActivityIndicator.prototype.showLoading2 = function(message,transparency,source){
+	if(source){
+		ActivityIndicator.prototype.btnSource = source;
+	}
 	ActivityIndicator.prototype.loading = ActivityIndicator.prototype.createActInd(message, transparency);
 	if(ActivityIndicator.prototype.osname==='iphone' || ActivityIndicator.prototype.osname==='ipad'){
 		ActivityIndicator.prototype.loading[0].visible = true;
@@ -77,6 +85,10 @@ ActivityIndicator.prototype.hideLoading = function(){
 			ActivityIndicator.prototype.loading[0].visible = false;
 		}
 		ActivityIndicator.prototype.loading[1].hide();
+		//reset click flag
+		if(ActivityIndicator.prototype.btnSource){
+			ActivityIndicator.prototype.btnSource.customClickFlag = false;
+		}
 	};
 };
 module.exports = ActivityIndicator;

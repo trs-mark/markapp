@@ -4,24 +4,33 @@
 function QuizWindow(GLOBAL,navi,windowTitle,start,end,willSave,loading,questionnaireObj) {
 	var btnclik=1;
 	var btnBack = Ti.UI.createButton({
-		title:'戻る'
+		//title:'戻る',
+		customClickFlag:false,
+		backgroundImage: GLOBAL.IMG_PATH + 'back.png'
 	});
 	btnBack.addEventListener('click',function(e){
-		var confirm = Titanium.UI.createAlertDialog({ 
-			message: '学習を終了しますか？',
-			buttonNames: ['OK','キャンセル'],
-			cancel: 1 
-		});
-		confirm.addEventListener('click',function(event){
-			if(event.index == 0){ 
-				if(GLOBAL.IS_ANDROID){
-					navi.close(self,{animated:true});
+		if(!e.source.customClickFlag){
+			var confirm = Titanium.UI.createAlertDialog({ 
+				message: '学習を終了しますか？',
+				buttonNames: ['OK','キャンセル'],
+				cancel: 1 
+			});
+			confirm.addEventListener('click',function(event){
+				if(event.index == 0){ 
+					if(GLOBAL.IS_ANDROID){
+						navi.close(self,{animated:true});
+					}else{
+						self.close();
+					}
 				}else{
-					self.close();
+					//custom flag for trapping only once action
+					e.source.customClickFlag = false;
 				}
-			}
-		});
-		confirm.show();
+			});
+			confirm.show();
+			//custom flag for trapping only once action
+			e.source.customClickFlag = true;
+		}
 	});
 	
 	var self = Ti.UI.createWindow({
@@ -63,10 +72,10 @@ function QuizWindow(GLOBAL,navi,windowTitle,start,end,willSave,loading,questionn
 				colors: [ { color: '#546C90', offset: 1.0 }, { color: '#AFBED4', offset: 0.25 } ],
 			};
 			btnBack.left = '10dp';
-			btnBack.width = '40dp';
+			btnBack.width = '48dp';
 			btnBack.height = '30dp';
 			btnBack.color = '#37527D';
-			btnBack.style = Ti.UI.iPhone.SystemButtonStyle.BORDERED;
+			//btnBack.style = Ti.UI.iPhone.SystemButtonStyle.BORDERED;
 			customNavBar.add(btnBack);
 		}
 		customNavBar.add(lblTitle);
@@ -110,7 +119,6 @@ function QuizWindow(GLOBAL,navi,windowTitle,start,end,willSave,loading,questionn
 	for (var i=0; i<btnLefts.length; i++){
 		var btnChoice = Titanium.UI.createButton({
 			customButtonId: i,
-			//id: QuizObj.questions[0].id,
 			left: btnLefts[i],
 			height:'60dp',
 			width:'20%',
@@ -123,17 +131,19 @@ function QuizWindow(GLOBAL,navi,windowTitle,start,end,willSave,loading,questionn
 			var x =questionnaire.clickFlag;
 			if(x==0){
 				results=questionnaire.evaluateAnswer(GLOBAL,e.source.customButtonId,buttonC);
-				var correctB =buttonC[results[0].correct_id];
-				var selectB =buttonC[results[0].selected_ID];
-				if(results[0].selected_ID==results[0].correct_id){
-					correctB.backgroundImage = GLOBAL.IMG_PATH + (results[0].correct_id) + '_bs.png';
-				}else{
-					correctB.backgroundImage = GLOBAL.IMG_PATH + (results[0].correct_id) + '_bs.png';
-					selectB.backgroundImage = GLOBAL.IMG_PATH + (results[0].selected_ID) + '_bx.png';
+				if(results){
+					var correctB =buttonC[results[0].correct_id];
+					var selectB =buttonC[results[0].selected_ID];
+					if(results[0].selected_ID==results[0].correct_id){
+						correctB.backgroundImage = GLOBAL.IMG_PATH + (results[0].correct_id) + '_bs.png';
+					}else{
+						correctB.backgroundImage = GLOBAL.IMG_PATH + (results[0].correct_id) + '_bs.png';
+						selectB.backgroundImage = GLOBAL.IMG_PATH + (results[0].selected_ID) + '_bx.png';
+					}
+					x=1;
+					setSwip.swipe.setVisible(true);
+					setSwip.comment.setVisible(true);
 				}
-				x=1;
-				setSwip.swipe.setVisible(true);
-				setSwip.comment.setVisible(true);
 			}
 		});
 		

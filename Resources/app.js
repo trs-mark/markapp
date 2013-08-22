@@ -23,7 +23,8 @@ var GLOBAL = {
  IMG_PATH : '',
  DEVICE_HEIGHT : Ti.Platform.displayCaps.platformHeight,
  DEVICE_WIDTH : Ti.Platform.displayCaps.platformWidth,
- CONVERT : {}
+ CONVERT : {},
+ IS_TOP_MENU: true
 };
 GLOBAL.BG_PATH = (GLOBAL.IS_ANDROID)?GLOBAL.RES_DIR + 'images/android_images/bg.png':GLOBAL.RES_DIR + 'images/iphone_images/bg.png';
 GLOBAL.IMG_PATH = (GLOBAL.IS_ANDROID)?GLOBAL.RES_DIR + 'images/android_images/':GLOBAL.RES_DIR + 'images/iphone_images/';

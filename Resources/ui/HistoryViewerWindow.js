@@ -24,7 +24,8 @@ function HistoryViewerWindow(GLOBAL,navi,chapterTitle,dataObj,showRetry,loading)
 		top:0,
 		left:'30dp',
 		right:'30dp',
-		height:'20%'
+		height:'20%',
+		customClickFlag:false
 	});
 	if (GLOBAL.IS_ANDROID) {
 		btnRetry.backgroundSelectedImage = GLOBAL.IMG_PATH + 'result_btn_tryagain_selected.png';
@@ -83,15 +84,19 @@ function HistoryViewerWindow(GLOBAL,navi,chapterTitle,dataObj,showRetry,loading)
 	//add retry button if not perfect
 	if(showRetry){
 		btnRetry.addEventListener('click',function(e){
-			loading.showLoading2('Loading...',1.0);
-			var QuizWindow = require('ui/QuizWindow');
-			var willSave = false;
-			var quizWindow = new QuizWindow(GLOBAL,navi,chapterTitle,dataObj.start,dataObj.end,willSave,loading,dataObj.mistakesObjArr);
-			if(GLOBAL.IS_ANDROID){
-				navi.isQuiz = true;
-				navi.open(quizWindow,{animated:true});
-			}else{
-				quizWindow.open();
+			if(!e.source.customClickFlag){
+				loading.showLoading2('Loading...',1.0,e.source);
+				var QuizWindow = require('ui/QuizWindow');
+				var willSave = false;
+				var quizWindow = new QuizWindow(GLOBAL,navi,chapterTitle,dataObj.start,dataObj.end,willSave,loading,dataObj.mistakesObjArr);
+				if(GLOBAL.IS_ANDROID){
+					navi.isQuiz = true;
+					navi.open(quizWindow,{animated:true});
+				}else{
+					quizWindow.open();
+				}
+				//custom flag for trapping only once action
+				e.source.customClickFlag = true;
 			}
 		});
 		if(GLOBAL.IS_ANDROID){
