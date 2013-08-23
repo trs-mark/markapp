@@ -79,6 +79,7 @@ Reviewer.prototype.setAsResult = function(GLOBAL,listView, questionnaireObj, use
 		var separatorLine = Ti.UI.createView({
 			width:'100%',
 			height:'1dp',
+			backgroundColor: '#4C4C4C',
 			borderWidth:1,
 			borderColor:'#4C4C4C'
 		});
@@ -147,6 +148,7 @@ Reviewer.prototype.setAsCommentary = function(GLOBAL,listView, questionnaireObj,
 	var separatorLine = Ti.UI.createView({
 		width:'100%',
 		height:'1dp',
+		backgroundColor: '#4C4C4C',
 		borderWidth:1,
 		borderColor:'#4C4C4C'
 	});
